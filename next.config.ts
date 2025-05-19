@@ -44,7 +44,6 @@ const nextConfig: NextConfig = {
   },
 
   experimental: {
-    optimizeCss: true,
     optimizePackageImports: ['@mui/material', '@mui/icons-material'],
   },
 };
