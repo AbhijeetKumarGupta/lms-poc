@@ -1,18 +1,10 @@
 'use client';
 
-import { Button, Card, CardContent, Typography } from '@mui/material';
-
-import { useTheme } from '@/hooks/useTheme';
-import { THEME } from '@/constants/theme';
+import { Card, CardContent, Typography } from '@mui/material';
 
 export const ThemeTest = () => {
-  const { theme, changeTheme } = useTheme();
-
   return (
     <article>
-      <Button onClick={() => changeTheme(theme === THEME.LIGHT ? THEME.DARK : THEME.LIGHT)}>
-        Toggle Theme
-      </Button>
       <Card>
         <CardContent>
           <Typography variant="h5">Lizard</Typography>

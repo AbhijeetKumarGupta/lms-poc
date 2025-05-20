@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 
-import { ThemeContextProvider } from '@/components/theme-context-provider/ThemeContextProvider';
+import { ThemeContextProvider } from '@/components/theme-context-provider';
+import LayoutRenderer from '@/components/organism/layout-renderer';
 
 import './globals.css';
 
@@ -28,7 +29,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <ThemeContextProvider>{children}</ThemeContextProvider>
+        <ThemeContextProvider>
+          <LayoutRenderer>{children}</LayoutRenderer>
+        </ThemeContextProvider>
       </body>
     </html>
   );

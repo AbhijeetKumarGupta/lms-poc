@@ -31,7 +31,7 @@ const useLocalStorage = <T>(key: string, defaultValue: T): [T, (value: T) => voi
     // Storage Event: Fires when localStorage changes in another tab (not the current one).
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
-  }, [defaultValue, key, isClient]);
+  }, [value, defaultValue, key, isClient]);
 
   useEffect(() => {
     if (!isClient) return;
@@ -41,10 +41,9 @@ const useLocalStorage = <T>(key: string, defaultValue: T): [T, (value: T) => voi
     if (!isEqual(value, newValue)) {
       setValue(newValue);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key, isClient]);
-  /* ********** */
 
-  /* Event handlers and other functions */
   const updateValue = useCallback(
     (newValue: T) => {
       if (!isClient) return;
@@ -54,8 +53,12 @@ const useLocalStorage = <T>(key: string, defaultValue: T): [T, (value: T) => voi
         safelySetLocalStorageItem(key, JSON.stringify(newValue));
       }
     },
-    [key, isClient]
+    [value, key, isClient]
   );
+  /* ********** */
+
+  /* Event handlers and other functions */
+
   /* ********** */
 
   return [value, updateValue];
