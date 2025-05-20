@@ -10,7 +10,7 @@ import ListItemText from '@mui/material/ListItemText';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 
-import { StyledDrawer, StyledDrawerContent } from './style';
+import { StyledDrawer, StyledDrawerContent } from './styles';
 
 interface Props {
   children: React.ReactNode;

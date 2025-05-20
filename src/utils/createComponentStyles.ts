@@ -8,7 +8,7 @@ export const createComponentStyles = (
     styleOverrides: {
       body: {
         backgroundColor: backgroundColor.neutral,
-        color: textColor.default,
+        color: textColor.primary ?? textColor.default,
         transition: 'background-color 0.3s ease, color 0.3s ease',
       },
     },
@@ -17,7 +17,7 @@ export const createComponentStyles = (
     styleOverrides: {
       root: {
         backgroundColor: backgroundColor.primary,
-        color: textColor.default,
+        color: textColor.primary ?? textColor.default,
         '&:hover': {
           backgroundColor: backgroundColor.primary,
           opacity: 0.9,
@@ -30,7 +30,7 @@ export const createComponentStyles = (
     styleOverrides: {
       root: {
         backgroundColor: backgroundColor.neutral,
-        color: textColor.default,
+        color: textColor.primary ?? textColor.default,
         transition: 'background-color 0.3s ease, color 0.3s ease',
       },
     },

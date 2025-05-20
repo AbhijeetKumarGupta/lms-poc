@@ -5,10 +5,14 @@ import AppBar from '@mui/material/AppBar';
 import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import { Box } from '@mui/material';
+import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 
 import { useTheme } from '@/hooks/useTheme';
 import { THEME } from '@/constants/theme';
 import CustomSwitch from '@/components/atom/custom-switch';
+
+import { StyledSignInButton, StyledSignUpButton } from './styles';
 
 interface TopBarProps {
   onMenuClick: () => void;
@@ -59,6 +63,15 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
             },
           }}
         />
+        <SignedOut>
+          <Box display="flex" gap={2}>
+            <StyledSignUpButton />
+            <StyledSignInButton />
+          </Box>
+        </SignedOut>
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
       </Toolbar>
     </AppBar>
   );
