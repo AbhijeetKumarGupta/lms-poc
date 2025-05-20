@@ -6,7 +6,8 @@ import { createComponentStyles } from '@/utils/createComponentStyles';
 const {
   __color_primary,
   __color_neutral,
-  __color_text,
+  __color_text_primary,
+  __color_text_neutral,
   __dark_color_primary,
   __dark_color_neutral,
   __dark_color_text,
@@ -21,7 +22,8 @@ export const themesOptions: Record<string, ThemeOptions> = {
         paper: __color_neutral,
       },
       text: {
-        primary: __color_text,
+        primary: __color_text_primary,
+        secondary: __color_text_neutral,
       },
     },
     components: createComponentStyles(
@@ -29,7 +31,7 @@ export const themesOptions: Record<string, ThemeOptions> = {
         primary: __color_primary,
         neutral: __color_neutral,
       },
-      { default: __color_text }
+      { default: __color_text_primary }
     ),
   },
   [THEME.DARK]: {

@@ -6,7 +6,8 @@ export enum THEME {
 const lightThemeColors = {
   __color_primary: '#f4f5f7',
   __color_neutral: '#FFFFFF',
-  __color_text: '#121212',
+  __color_text_primary: '#121212',
+  __color_text_neutral: '#FFFFFF',
 };
 
 const darkThemeColors = {

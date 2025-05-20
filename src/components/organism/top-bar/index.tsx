@@ -17,7 +17,12 @@ interface TopBarProps {
 export default function TopBar({ onMenuClick }: TopBarProps) {
   const { theme, changeTheme } = useTheme();
   return (
-    <AppBar position="fixed" sx={{ zIndex: theme => theme.zIndex.drawer + 1 }}>
+    <AppBar
+      position="fixed"
+      sx={{
+        zIndex: muiTheme => muiTheme.zIndex.drawer + 1,
+      }}
+    >
       <Toolbar>
         <IconButton
           size="large"
@@ -29,7 +34,14 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
         >
           <MenuIcon />
         </IconButton>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+        <Typography
+          variant="h6"
+          sx={{
+            flexGrow: 1,
+            color: muiTheme => muiTheme.palette.text.secondary,
+            fontWeight: '700',
+          }}
+        >
           Learn Before You Earn
         </Typography>
         <CustomSwitch
@@ -37,7 +49,15 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
             checked: theme === THEME.DARK,
             onChange: () => changeTheme(theme === THEME.DARK ? THEME.LIGHT : THEME.DARK),
           }}
-          controllerProps={{ label: 'Dark' }}
+          controllerProps={{
+            label: 'Dark',
+            sx: {
+              '.MuiFormControlLabel-label': {
+                color: muiTheme => muiTheme.palette.text.secondary,
+                fontWeight: '700',
+              },
+            },
+          }}
         />
       </Toolbar>
     </AppBar>

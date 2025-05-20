@@ -38,7 +38,7 @@ export const createComponentStyles = (
   MuiTypography: {
     styleOverrides: {
       root: {
-        color: textColor.default,
+        color: textColor.primary ?? textColor.default,
         transition: 'color 0.3s ease',
       },
     },
