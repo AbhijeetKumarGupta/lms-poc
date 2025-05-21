@@ -1,3 +1,4 @@
+import { USER_ROLES } from '@/constants';
 import MailIcon from '@mui/icons-material/Mail';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 
@@ -10,7 +11,7 @@ interface DrawerItem {
 export const getDrawerItems = (role?: string): DrawerItem[] => {
   const commonItems = [{ text: 'Inbox', icon: <InboxIcon />, onClick: () => {} }];
 
-  if (role === 'teacher') {
+  if (role === USER_ROLES.TEACHER) {
     return [
       ...commonItems,
       { text: 'Starred', icon: <MailIcon />, onClick: () => {} },
@@ -18,7 +19,7 @@ export const getDrawerItems = (role?: string): DrawerItem[] => {
     ];
   }
 
-  if (role === 'student') {
+  if (role === USER_ROLES.STUDENT) {
     return [...commonItems, { text: 'Student Dashboard', icon: <MailIcon />, onClick: () => {} }];
   }
 

@@ -3,7 +3,7 @@
 import { useState, useCallback, useMemo } from 'react';
 import { SignedIn, useUser } from '@clerk/nextjs';
 
-import RoleSelect from '@/components/role-select/RoleSelect';
+import RoleSelect from '@/components/molecule/role-select';
 import TopBar from '@/components/organism/top-bar';
 import ResponsiveDrawer from '@/components/organism/drawer';
 import { getDrawerItems } from '@/utils/getDrawerItems';

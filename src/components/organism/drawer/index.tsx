@@ -39,9 +39,9 @@ export default function ResponsiveDrawer({ topbar, children, open, onToggle, dra
             keepMounted: !isOpenAndDesktop,
           }}
         >
-          <div style={{ marginTop: '65px' }}>
+          <Box style={{ marginTop: '65px' }}>
             <List>
-              {drawerItems.map(({ text, icon, onClick }, index) => (
+              {drawerItems?.map?.(({ text, icon, onClick }, index) => (
                 <ListItem key={`${text}-${index}`} disablePadding>
                   <ListItemButton onClick={onClick}>
                     <ListItemIcon>{icon}</ListItemIcon>
@@ -50,7 +50,7 @@ export default function ResponsiveDrawer({ topbar, children, open, onToggle, dra
                 </ListItem>
               ))}
             </List>
-          </div>
+          </Box>
         </StyledDrawer>
       )}
 
