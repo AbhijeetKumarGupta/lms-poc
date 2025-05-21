@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { Box } from '@mui/material';
-import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
+import { SignedIn, SignedOut, UserButton, useUser } from '@clerk/nextjs';
 
 import { useTheme } from '@/hooks/useTheme';
 import { THEME } from '@/constants/theme';
@@ -20,6 +20,9 @@ interface TopBarProps {
 
 export default function TopBar({ onMenuClick }: TopBarProps) {
   const { theme, changeTheme } = useTheme();
+  const { user } = useUser();
+  const role = user?.unsafeMetadata?.role;
+
   return (
     <AppBar
       position="fixed"
@@ -28,16 +31,18 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
       }}
     >
       <Toolbar>
-        <IconButton
-          size="large"
-          edge="start"
-          color="inherit"
-          aria-label="menu"
-          onClick={onMenuClick}
-          sx={{ mr: 2 }}
-        >
-          <MenuIcon />
-        </IconButton>
+        {!!role && (
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            onClick={onMenuClick}
+            sx={{ mr: 2 }}
+          >
+            <MenuIcon />
+          </IconButton>
+        )}
         <Typography
           variant="h6"
           sx={{

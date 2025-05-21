@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useCallback } from 'react';
-import MailIcon from '@mui/icons-material/Mail';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
+import { useState, useCallback, useMemo } from 'react';
+import { SignedIn, useUser } from '@clerk/nextjs';
 
+import RoleSelect from '@/components/role-select/RoleSelect';
 import TopBar from '@/components/organism/top-bar';
 import ResponsiveDrawer from '@/components/organism/drawer';
+import { getDrawerItems } from '@/utils/getDrawerItems';
 
 interface LayoutRendererProps {
   children: React.ReactNode;
@@ -13,18 +14,16 @@ interface LayoutRendererProps {
 
 export default function LayoutRenderer({ children }: LayoutRendererProps) {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const { user, isLoaded } = useUser();
+  const role = user?.unsafeMetadata?.role as string | undefined;
 
   const handleDrawerToggle = useCallback(() => {
     setDrawerOpen(prev => !prev);
   }, []);
 
-  //TODO: Add drawer items in proper place and remove this
-  const drawerItems = [
-    { text: 'Inbox', icon: <InboxIcon />, onClick: () => {} },
-    { text: 'Starred', icon: <MailIcon />, onClick: () => {} },
-    { text: 'Send email', icon: <InboxIcon />, onClick: () => {} },
-    { text: 'Drafts', icon: <MailIcon />, onClick: () => {} },
-  ];
+  const drawerItems = useMemo(() => getDrawerItems(role), [role]);
+
+  const showPageContent = role || (isLoaded && !user);
 
   return (
     <ResponsiveDrawer
@@ -33,7 +32,13 @@ export default function LayoutRenderer({ children }: LayoutRendererProps) {
       onToggle={handleDrawerToggle}
       drawerItems={drawerItems}
     >
-      {children}
+      {showPageContent ? (
+        children
+      ) : (
+        <SignedIn>
+          <RoleSelect />
+        </SignedIn>
+      )}
     </ResponsiveDrawer>
   );
 }
