@@ -6,6 +6,18 @@ const nextConfig: NextConfig = {
   images: {
     formats: ['image/avif', 'image/webp'],
     minimumCacheTTL: 60,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'mui.com',
+        pathname: '/static/images/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'randomuser.me',
+        pathname: '/api/portraits/**',
+      },
+    ],
   },
 
   webpack(config, { isServer }) {
@@ -45,7 +57,32 @@ const nextConfig: NextConfig = {
 
   experimental: {
     optimizePackageImports: ['@mui/material', '@mui/icons-material'],
+    optimizeCss: {
+      inlineThreshold: 0,
+    },
+    webpackBuildWorker: true,
   },
+
+  headers: async () => [
+    {
+      source: '/:path*',
+      headers: [
+        {
+          key: 'Cache-Control',
+          value: 'public, max-age=31536000, immutable',
+        },
+      ],
+    },
+    {
+      source: '/api/:path*',
+      headers: [
+        {
+          key: 'Cache-Control',
+          value: 'no-store, must-revalidate',
+        },
+      ],
+    },
+  ],
 };
 
 export default nextConfig;

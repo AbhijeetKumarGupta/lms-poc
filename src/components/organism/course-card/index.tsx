@@ -1,15 +1,16 @@
+import { memo, useCallback } from 'react';
+import Image from 'next/image';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
-import { Box } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
-import CardMedia from '@mui/material/CardMedia';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import { Box } from '@mui/material';
 
 interface CourseCardProps {
   showEnrollButton: boolean;
@@ -28,7 +29,7 @@ interface CourseCardProps {
   onShare?: () => void;
 }
 
-export default function CourseCard({
+const CourseCard = memo(function CourseCard({
   showEnrollButton,
   title,
   image,
@@ -40,6 +41,14 @@ export default function CourseCard({
   onFavorite,
   onShare,
 }: CourseCardProps) {
+  const handleEnrollClick = useCallback(() => {
+    if (isEnrolled) {
+      onView();
+    } else {
+      onEnroll();
+    }
+  }, [isEnrolled, onEnroll, onView]);
+
   return (
     <Card sx={{ maxWidth: 330, position: 'relative', minHeight: 420 }}>
       <CardHeader
@@ -51,7 +60,17 @@ export default function CourseCard({
         title={title}
         subheader={`${creator?.name} • ${creator?.dateOfCreation}`}
       />
-      <CardMedia component="img" height="194" image={image} alt={title} />
+      <Box sx={{ position: 'relative', height: 194 }}>
+        <Image
+          src={image}
+          alt={title}
+          fill
+          sizes="(max-width: 330px) 100vw, 330px"
+          style={{ objectFit: 'cover' }}
+          priority={false}
+          quality={75}
+        />
+      </Box>
       <CardContent sx={{ minHeight: 80, maxHeight: 80, overflow: 'hidden' }}>
         <Typography variant="body2">{description}</Typography>
       </CardContent>
@@ -63,7 +82,8 @@ export default function CourseCard({
           <Button
             variant="contained"
             color={isEnrolled ? 'success' : 'primary'}
-            onClick={isEnrolled ? onView : onEnroll}
+            onClick={handleEnrollClick}
+            type="button"
           >
             {isEnrolled ? 'View' : 'Enroll'}
           </Button>
@@ -79,4 +99,6 @@ export default function CourseCard({
       </CardActions>
     </Card>
   );
-}
+});
+
+export default CourseCard;
