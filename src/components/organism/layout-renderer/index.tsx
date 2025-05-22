@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import { SignedIn, useUser } from '@clerk/nextjs';
 
 import RoleSelect from '@/components/molecule/role-select';
@@ -16,6 +16,10 @@ export default function LayoutRenderer({ children }: LayoutRendererProps) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { user, isLoaded } = useUser();
   const role = user?.unsafeMetadata?.role as string | undefined;
+
+  useEffect(() => {
+    if (!user && drawerOpen) setDrawerOpen(false);
+  }, [user, drawerOpen]);
 
   const handleDrawerToggle = useCallback(() => {
     setDrawerOpen(prev => !prev);

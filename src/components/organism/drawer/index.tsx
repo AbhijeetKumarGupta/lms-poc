@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import List from '@mui/material/List';
@@ -10,6 +11,8 @@ import ListItemText from '@mui/material/ListItemText';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 
+import { DrawerItem } from '@/types/drawer';
+
 import { StyledDrawer, StyledDrawerContent } from './styles';
 
 interface Props {
@@ -17,11 +20,12 @@ interface Props {
   open: boolean;
   onToggle: () => void;
   topbar?: React.ReactNode;
-  drawerItems: { text: string; icon: React.ReactNode; onClick: () => void }[];
+  drawerItems: DrawerItem[];
 }
 
 export default function ResponsiveDrawer({ topbar, children, open, onToggle, drawerItems }: Props) {
   const theme = useTheme();
+  const router = useRouter();
   const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
   const isOpenAndDesktop = isDesktop && open;
   const showDrawer = !isDesktop || isOpenAndDesktop;
@@ -41,9 +45,9 @@ export default function ResponsiveDrawer({ topbar, children, open, onToggle, dra
         >
           <Box style={{ marginTop: '65px' }}>
             <List>
-              {drawerItems?.map?.(({ text, icon, onClick }, index) => (
+              {drawerItems?.map?.(({ text, icon, url }, index) => (
                 <ListItem key={`${text}-${index}`} disablePadding>
-                  <ListItemButton onClick={onClick}>
+                  <ListItemButton onClick={() => router.push(url)}>
                     <ListItemIcon>{icon}</ListItemIcon>
                     <ListItemText primary={text} />
                   </ListItemButton>

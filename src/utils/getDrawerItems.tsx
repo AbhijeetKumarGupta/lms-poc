@@ -1,26 +1,20 @@
 import { USER_ROLES } from '@/constants';
-import MailIcon from '@mui/icons-material/Mail';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-
-interface DrawerItem {
-  text: string;
-  icon: React.ReactNode;
-  onClick: () => void;
-}
+import AppsIcon from '@mui/icons-material/Apps';
+import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
+import { DrawerItem } from '@/types/drawer';
 
 export const getDrawerItems = (role?: string): DrawerItem[] => {
-  const commonItems = [{ text: 'Inbox', icon: <InboxIcon />, onClick: () => {} }];
+  const commonItems = [
+    { text: 'All Course', icon: <AppsIcon />, url: '/' },
+    { text: 'My Course', icon: <AppRegistrationIcon />, url: '/my-courses' },
+  ];
 
   if (role === USER_ROLES.TEACHER) {
-    return [
-      ...commonItems,
-      { text: 'Starred', icon: <MailIcon />, onClick: () => {} },
-      { text: 'Teacher Panel', icon: <MailIcon />, onClick: () => {} },
-    ];
+    return [...commonItems];
   }
 
   if (role === USER_ROLES.STUDENT) {
-    return [...commonItems, { text: 'Student Dashboard', icon: <MailIcon />, onClick: () => {} }];
+    return [...commonItems];
   }
 
   return [];

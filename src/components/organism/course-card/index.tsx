@@ -27,6 +27,7 @@ interface CourseCardProps {
   onView: () => void;
   onFavorite?: () => void;
   onShare?: () => void;
+  isFirstCard?: boolean;
 }
 
 const CourseCard = memo(function CourseCard({
@@ -40,6 +41,7 @@ const CourseCard = memo(function CourseCard({
   onView,
   onFavorite,
   onShare,
+  isFirstCard = false,
 }: CourseCardProps) {
   const handleEnrollClick = useCallback(() => {
     if (isEnrolled) {
@@ -67,7 +69,7 @@ const CourseCard = memo(function CourseCard({
           fill
           sizes="(max-width: 330px) 100vw, 330px"
           style={{ objectFit: 'cover' }}
-          priority={false}
+          priority={isFirstCard}
           quality={75}
         />
       </Box>

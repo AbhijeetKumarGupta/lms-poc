@@ -3,14 +3,16 @@
 import { useUser } from '@clerk/nextjs';
 import { Box, Divider, Stack, Typography } from '@mui/material';
 import { useState, useCallback, useMemo } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 
 import CourseCard from '@/components/organism/course-card';
-import { courses } from '@/constants';
+import { courses, USER_ROLES } from '@/constants';
 
 export const CoursesContainer = () => {
   const { user } = useUser();
   const router = useRouter();
+  const pathname = usePathname();
+  const isMyCourses = pathname === '/my-courses';
   const [enrolledCourses, setEnrolledCourses] = useState<string[]>(
     Array.isArray(user?.unsafeMetadata?.enrolledCourses)
       ? user?.unsafeMetadata?.enrolledCourses
@@ -34,24 +36,30 @@ export const CoursesContainer = () => {
     [router]
   );
 
-  const courseCards = useMemo(
-    () =>
-      courses?.map?.(course => (
-        <CourseCard
-          key={course?.id}
-          {...course}
-          isEnrolled={enrolledCourses?.includes?.(course?.id)}
-          onEnroll={() => handleEnroll(course?.id)}
-          onView={() => handleView(course?.id)}
-          showEnrollButton={!!user}
-        />
-      )),
-    [enrolledCourses, handleEnroll, handleView, user]
-  );
+  const courseCards = useMemo(() => {
+    const filteredCourses = isMyCourses
+      ? courses?.filter(course =>
+          user?.unsafeMetadata?.role === USER_ROLES.TEACHER
+            ? course?.creator?.id === user?.id
+            : enrolledCourses?.includes?.(course?.id)
+        )
+      : courses;
+    return filteredCourses?.map?.((course, index) => (
+      <CourseCard
+        key={course?.id}
+        {...course}
+        isEnrolled={enrolledCourses?.includes?.(course?.id)}
+        onEnroll={() => handleEnroll(course?.id)}
+        onView={() => handleView(course?.id)}
+        showEnrollButton={!!user}
+        isFirstCard={index === 0}
+      />
+    ));
+  }, [isMyCourses, enrolledCourses, handleEnroll, handleView, user]);
 
   return (
     <Stack gap={2}>
-      <Typography variant="h5">Courses</Typography>
+      <Typography variant="h5">{isMyCourses ? 'My Course' : 'All Course'}</Typography>
       <Divider />
       <Box display="flex" justifyContent="center" flexWrap="wrap" gap={2}>
         {courseCards}
