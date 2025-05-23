@@ -59,7 +59,7 @@ export const CoursesContainer = () => {
 
   return (
     <Stack gap={2}>
-      <Typography variant="h5">{isMyCourses ? 'My Course' : 'All Course'}</Typography>
+      <Typography variant="h5">{isMyCourses ? 'My Courses' : 'All Courses'}</Typography>
       <Divider />
       <Box display="flex" justifyContent="center" flexWrap="wrap" gap={2}>
         {courseCards}
