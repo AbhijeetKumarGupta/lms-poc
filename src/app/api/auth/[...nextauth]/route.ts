@@ -2,6 +2,7 @@ import NextAuth, { NextAuthOptions, Session, User } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
 const authOptions: NextAuthOptions = {
+  secret: process.env.CLERK_SECRET_KEY,
   providers: [
     CredentialsProvider({
       name: 'Credentials',
