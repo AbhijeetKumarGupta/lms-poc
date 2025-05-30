@@ -31,7 +31,7 @@ export default function SignUpForm() {
     try {
       await signUpUser(values);
       router.replace('/auth/sign-in');
-    } catch (err: any) {
+    } catch (err: Any) {
       setServerError(err.message || 'Network error or server unavailable.');
     }
   };

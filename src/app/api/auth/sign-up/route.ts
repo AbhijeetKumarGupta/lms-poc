@@ -21,7 +21,7 @@ export async function POST(req: Request) {
 
     const user = await response.json();
     return NextResponse.json(user, { status: 201 });
-  } catch (error: any) {
+  } catch (error: Any) {
     return NextResponse.json(
       { message: error.message || 'Network error or server unavailable.' },
       { status: 500 }

@@ -1,6 +1,6 @@
 import { SignUpFormValues } from '@/libs/types/auth';
 
-export async function signUpUser(data: SignUpFormValues): Promise<any> {
+export async function signUpUser(data: SignUpFormValues): Promise<Any> {
   const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/auth/sign-up`, {
     method: 'POST',
     body: JSON.stringify(data),
