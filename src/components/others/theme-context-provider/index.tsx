@@ -8,7 +8,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { THEME } from '@/constants/theme';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { themesOptions } from '@/theme';
-import { Theme } from '@/types/theme';
+import { Theme } from '@/libs/types/theme';
 import { ThemeContext } from '@/context/ThemeContext';
 
 export const ThemeContextProvider = ({ children }: { children: ReactNode }) => {

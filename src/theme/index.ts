@@ -1,7 +1,7 @@
 import { ThemeOptions } from '@mui/material';
 
 import { colors, THEME } from '@/constants/theme';
-import { createComponentStyles } from '@/utils/createComponentStyles';
+import { createComponentStyles } from '@/libs/utils/createComponentStyles';
 
 const {
   __color_primary,

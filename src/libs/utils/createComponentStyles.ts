@@ -1,4 +1,4 @@
-import { ColorCategory } from '@/types/theme';
+import { ColorCategory } from '@/libs/types/theme';
 
 export const createComponentStyles = (
   backgroundColor: ColorCategory,

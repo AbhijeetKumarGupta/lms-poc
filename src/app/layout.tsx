@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { ClerkProvider } from '@clerk/nextjs';
 
-import { ThemeContextProvider } from '@/components/theme-context-provider';
+import { ThemeContextProvider } from '@/components/others/theme-context-provider';
 import LayoutRenderer from '@/components/organism/layout-renderer';
 
 import './globals.css';

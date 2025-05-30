@@ -3,7 +3,7 @@ import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import AppsIcon from '@mui/icons-material/Apps';
 
 import { USER_ROLES } from '@/constants';
-import { DrawerItem } from '@/types/drawer';
+import { DrawerItem } from '@/libs/types/drawer';
 
 export const getDrawerItems = (role?: string): DrawerItem[] => {
   const commonItems = [

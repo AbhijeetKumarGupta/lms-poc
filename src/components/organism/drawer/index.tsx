@@ -11,7 +11,7 @@ import ListItemText from '@mui/material/ListItemText';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 
-import { DrawerItem } from '@/types/drawer';
+import { DrawerItem } from '@/libs/types/drawer';
 
 import { StyledDrawer, StyledDrawerContent } from './styles';
 

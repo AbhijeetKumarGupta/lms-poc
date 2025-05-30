@@ -1,7 +1,7 @@
 import { createContext } from 'react';
 
 import { THEME } from '@/constants/theme';
-import { Theme } from '@/types/theme';
+import { Theme } from '@/libs/types/theme';
 
 interface ThemeContextInterface {
   theme: Theme;

@@ -3,7 +3,7 @@ import {
   safelyGetLocalStorageItem,
   safelyParseJSON,
   safelySetLocalStorageItem,
-} from '@/utils';
+} from '@/libs/utils';
 import { useCallback, useEffect, useState } from 'react';
 
 const useLocalStorage = <T>(key: string, defaultValue: T): [T, (value: T) => void] => {
