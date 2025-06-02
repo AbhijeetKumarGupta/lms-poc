@@ -6,7 +6,7 @@ export enum USER_ROLES {
 // TODO: Delete this after testing
 export const courses = [
   {
-    id: 'course-1',
+    id: '1',
     title: 'Full Stack Web Development',
     image: 'https://mui.com/static/images/cards/paella.jpg',
     description:
@@ -19,7 +19,7 @@ export const courses = [
     },
   },
   {
-    id: 'course-2',
+    id: '2',
     title: 'JavaScript Essentials',
     image: 'https://mui.com/static/images/cards/contemplative-reptile.jpg',
     description:
@@ -32,7 +32,7 @@ export const courses = [
     },
   },
   {
-    id: 'course-3',
+    id: '3',
     title: 'Python for Data Science',
     image: 'https://mui.com/static/images/cards/live-from-space.jpg',
     description: 'A beginner-friendly course to get started with Python and data science tools.',
@@ -44,7 +44,7 @@ export const courses = [
     },
   },
   {
-    id: 'course-4',
+    id: '4',
     title: 'React Mastery',
     image: 'https://mui.com/static/images/cards/paella.jpg',
     description:
@@ -57,7 +57,7 @@ export const courses = [
     },
   },
   {
-    id: 'course-5',
+    id: '5',
     title: 'Android App Development',
     image: 'https://mui.com/static/images/cards/contemplative-reptile.jpg',
     description: 'Create powerful Android apps using Kotlin and Android Studio.',
@@ -69,7 +69,7 @@ export const courses = [
     },
   },
   {
-    id: 'course-6',
+    id: '6',
     title: 'Machine Learning Basics',
     image: 'https://mui.com/static/images/cards/live-from-space.jpg',
     description:
@@ -82,7 +82,7 @@ export const courses = [
     },
   },
   {
-    id: 'course-7',
+    id: '7',
     title: 'Data Structures & Algorithms',
     image: 'https://mui.com/static/images/cards/paella.jpg',
     description: 'Sharpen your problem-solving skills and ace technical interviews.',
@@ -94,7 +94,7 @@ export const courses = [
     },
   },
   {
-    id: 'course-8',
+    id: '8',
     title: 'Cloud Computing with AWS',
     image: 'https://mui.com/static/images/cards/contemplative-reptile.jpg',
     description: 'Learn to deploy and manage scalable applications on Amazon Web Services.',
@@ -106,7 +106,7 @@ export const courses = [
     },
   },
   {
-    id: 'course-9',
+    id: '9',
     title: 'SQL & Databases',
     image: 'https://mui.com/static/images/cards/live-from-space.jpg',
     description: 'Master SQL and relational database concepts for backend development.',
@@ -118,7 +118,7 @@ export const courses = [
     },
   },
   {
-    id: 'course-10',
+    id: '10',
     title: 'UI/UX Design Fundamentals',
     image: 'https://mui.com/static/images/cards/paella.jpg',
     description: 'Design beautiful and user-friendly interfaces with Figma and Adobe XD.',
@@ -130,7 +130,7 @@ export const courses = [
     },
   },
   {
-    id: 'course-11',
+    id: '11',
     title: 'Node.js & Express',
     image: 'https://mui.com/static/images/cards/contemplative-reptile.jpg',
     description: 'Build fast and scalable server-side applications with Node.js and Express.',
@@ -142,7 +142,7 @@ export const courses = [
     },
   },
   {
-    id: 'course-12',
+    id: '12',
     title: 'Agile Project Management',
     image: 'https://mui.com/static/images/cards/live-from-space.jpg',
     description: 'Learn Agile methodologies and manage software projects efficiently.',
@@ -154,7 +154,7 @@ export const courses = [
     },
   },
   {
-    id: 'course-13',
+    id: '13',
     title: 'Cybersecurity Essentials',
     image: 'https://mui.com/static/images/cards/paella.jpg',
     description: 'Understand the basics of cybersecurity and how to protect digital assets.',

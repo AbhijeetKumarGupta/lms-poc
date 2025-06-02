@@ -1,3 +1,5 @@
+'use client';
+
 import { memo, useCallback } from 'react';
 import Image from 'next/image';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -24,10 +26,12 @@ interface CourseCardProps {
   };
   isEnrolled: boolean;
   onEnroll: () => void;
+  onUnenroll?: () => void;
   onView: () => void;
   onFavorite?: () => void;
   onShare?: () => void;
   isFirstCard?: boolean;
+  isSubmitting?: boolean;
 }
 
 const CourseCard = memo(function CourseCard({
@@ -38,18 +42,24 @@ const CourseCard = memo(function CourseCard({
   creator,
   isEnrolled,
   onEnroll,
+  onUnenroll,
   onView,
   onFavorite,
   onShare,
   isFirstCard = false,
+  isSubmitting,
 }: CourseCardProps) {
   const handleEnrollClick = useCallback(() => {
-    if (isEnrolled) {
-      onView();
-    } else {
-      onEnroll();
-    }
-  }, [isEnrolled, onEnroll, onView]);
+    onEnroll?.();
+  }, [onEnroll]);
+
+  const handleUnenrollClick = useCallback(() => {
+    onUnenroll?.();
+  }, [onUnenroll]);
+
+  const handleViewClick = useCallback(() => {
+    onView?.();
+  }, [onView]);
 
   return (
     <Card sx={{ maxWidth: 330, position: 'relative', minHeight: 420 }}>
@@ -81,14 +91,37 @@ const CourseCard = memo(function CourseCard({
         disableSpacing
       >
         {showEnrollButton && (
-          <Button
-            variant="contained"
-            color={isEnrolled ? 'success' : 'primary'}
-            onClick={handleEnrollClick}
-            type="button"
-          >
-            {isEnrolled ? 'View' : 'Enroll'}
-          </Button>
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            {isEnrolled ? (
+              <>
+                <Button
+                  disabled={isSubmitting}
+                  variant="contained"
+                  color="success"
+                  onClick={handleViewClick}
+                >
+                  View
+                </Button>
+                <Button
+                  loading={isSubmitting}
+                  variant="outlined"
+                  color="error"
+                  onClick={handleUnenrollClick}
+                >
+                  Unenroll
+                </Button>
+              </>
+            ) : (
+              <Button
+                loading={isSubmitting}
+                variant="contained"
+                color="primary"
+                onClick={handleEnrollClick}
+              >
+                Enroll
+              </Button>
+            )}
+          </Box>
         )}
         <Box sx={{ display: 'flex', gap: 1 }}>
           <IconButton aria-label="add to favorites" onClick={onFavorite}>
