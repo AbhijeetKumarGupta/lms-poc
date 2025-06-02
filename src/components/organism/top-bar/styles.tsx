@@ -1,9 +1,8 @@
-import { SignInButton, SignUpButton } from '@clerk/nextjs';
-import { styled, SxProps, Theme } from '@mui/material';
+import { styled, SxProps, Theme, Button } from '@mui/material';
 
 import { THEME } from '@/constants/theme';
 
-export const StyledSignInButton = styled(SignInButton)(({ theme }) => ({
+export const StyledSignInLogoutButton = styled(Button)(({ theme }) => ({
   cursor: 'pointer',
   backgroundColor: theme.palette.primary.main,
   color: theme.palette.primary.contrastText,
@@ -13,12 +12,14 @@ export const StyledSignInButton = styled(SignInButton)(({ theme }) => ({
   border: `2px solid ${theme.palette.primary.contrastText}`,
   transition: 'background-color 0.3s, color 0.3s',
   '&:hover': {
+    borderColor: theme.palette.primary.light,
+    color: theme.palette.primary.light,
     borderRadius: 18,
     transition: 'border-radius 0.2s',
   },
 }));
 
-export const StyledSignUpButton = styled(SignUpButton)(({ theme }) => ({
+export const StyledSignUpButton = styled(Button)(({ theme }) => ({
   cursor: 'pointer',
   backgroundColor: theme.palette.background.paper,
   color: theme.palette.primary.main,
@@ -28,6 +29,7 @@ export const StyledSignUpButton = styled(SignUpButton)(({ theme }) => ({
   border: '2px solid transparent',
   transition: 'background-color 0.3s, color 0.3s',
   '&:hover': {
+    borderColor: theme.palette.primary.light,
     borderRadius: 18,
     transition: 'border-radius 0.2s',
   },

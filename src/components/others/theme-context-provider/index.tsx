@@ -4,6 +4,7 @@ import { ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import { ReactNode, useCallback, useEffect, useState } from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
+import { SessionProvider } from 'next-auth/react';
 
 import { THEME } from '@/constants/theme';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
@@ -31,11 +32,13 @@ export const ThemeContextProvider = ({ children }: { children: ReactNode }) => {
   const lightTheme = createTheme(themesOptions?.[THEME.LIGHT]);
 
   return (
-    <ThemeContext.Provider value={{ theme: currentTheme, changeTheme }}>
-      <ThemeProvider theme={currentTheme === THEME.LIGHT ? lightTheme : darkTheme}>
-        <CssBaseline />
-        {children}
-      </ThemeProvider>
-    </ThemeContext.Provider>
+    <SessionProvider>
+      <ThemeContext.Provider value={{ theme: currentTheme, changeTheme }}>
+        <ThemeProvider theme={currentTheme === THEME.LIGHT ? lightTheme : darkTheme}>
+          <CssBaseline />
+          {children}
+        </ThemeProvider>
+      </ThemeContext.Provider>
+    </SessionProvider>
   );
 };

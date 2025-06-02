@@ -1,58 +1,41 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+import { useSession, signIn, signOut } from 'next-auth/react';
 import MenuIcon from '@mui/icons-material/Menu';
 import AppBar from '@mui/material/AppBar';
 import IconButton from '@mui/material/IconButton';
-import DarkModeIcon from '@mui/icons-material/DarkMode';
-import LightModeIcon from '@mui/icons-material/LightMode';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { Box } from '@mui/material';
-import { SignedIn, SignedOut, UserButton, useUser } from '@clerk/nextjs';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import LightModeIcon from '@mui/icons-material/LightMode';
 
 import { useTheme } from '@/hooks/useTheme';
 import { THEME } from '@/constants/theme';
 import CustomSwitch from '@/components/atom/custom-switch';
 
-import { StyledSignInButton, StyledSignUpButton, switchControllerStyles } from './styles';
+import { StyledSignInLogoutButton, StyledSignUpButton, switchControllerStyles } from './styles';
 
 interface TopBarProps {
   onMenuClick: () => void;
 }
 
 export default function TopBar({ onMenuClick }: TopBarProps) {
+  const router = useRouter();
   const { theme, changeTheme } = useTheme();
-  const { user } = useUser();
-  const role = user?.unsafeMetadata?.role;
+  const { data: session } = useSession();
+  const role = session?.user?.role;
 
   return (
-    <AppBar
-      position="fixed"
-      sx={{
-        zIndex: muiTheme => muiTheme.zIndex.drawer + 1,
-      }}
-    >
+    <AppBar position="fixed" sx={{ zIndex: theme => theme.zIndex.drawer + 1 }}>
       <Toolbar>
         {!!role && (
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            onClick={onMenuClick}
-            sx={{ mr: 2 }}
-          >
+          <IconButton onClick={onMenuClick} color="inherit" edge="start" sx={{ mr: 2 }}>
             <MenuIcon />
           </IconButton>
         )}
-        <Typography
-          variant="h6"
-          sx={{
-            flexGrow: 1,
-            color: muiTheme => muiTheme.palette.text.secondary,
-            fontWeight: '700',
-          }}
-        >
+        <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 700 }}>
           Learn Before You Earn
         </Typography>
         <CustomSwitch
@@ -65,15 +48,16 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
             sx: switchControllerStyles,
           }}
         />
-        <SignedOut>
+        {!session ? (
           <Box display="flex" gap={2}>
-            <StyledSignUpButton />
-            <StyledSignInButton />
+            <StyledSignInLogoutButton onClick={() => signIn()}>Sign In</StyledSignInLogoutButton>
+            <StyledSignUpButton onClick={() => router.push('/auth/sign-up')}>
+              Sign Up
+            </StyledSignUpButton>
           </Box>
-        </SignedOut>
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
+        ) : (
+          <StyledSignInLogoutButton onClick={() => signOut()}>Logout</StyledSignInLogoutButton>
+        )}
       </Toolbar>
     </AppBar>
   );

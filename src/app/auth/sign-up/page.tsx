@@ -2,7 +2,17 @@
 
 import { useRouter } from 'next/navigation';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Box, Button, Stack, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
@@ -15,14 +25,18 @@ export default function SignUpForm() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    setValue,
+    watch,
   } = useForm<SignUpFormValues>({
     resolver: yupResolver(signupSchema),
     defaultValues: {
       name: '',
       email: '',
       password: '',
+      role: 'student',
     },
   });
+
   const router = useRouter();
   const [serverError, setServerError] = useState('');
 
@@ -67,6 +81,20 @@ export default function SignUpForm() {
           error={!!errors.password}
           helperText={errors.password?.message}
         />
+
+        <FormControl fullWidth error={!!errors.role}>
+          <InputLabel id="role-label">Role</InputLabel>
+          <Select
+            labelId="role-label"
+            value={watch('role')}
+            label="Role"
+            onChange={e => setValue('role', e.target.value, { shouldValidate: true })}
+          >
+            <MenuItem value="teacher">Teacher</MenuItem>
+            <MenuItem value="student">Student</MenuItem>
+          </Select>
+          {errors.role && <Typography color="error">{errors.role.message}</Typography>}
+        </FormControl>
 
         <Button type="submit" variant="contained" color="primary" fullWidth disabled={isSubmitting}>
           Sign Up

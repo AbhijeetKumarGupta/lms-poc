@@ -7,4 +7,8 @@ export const signupSchema = yup.object({
     .string()
     .min(6, 'Password must be at least 6 characters')
     .required('Password is required'),
+  role: yup
+    .string()
+    .oneOf(['teacher', 'student'], 'Select a valid role')
+    .required('Role is required'),
 });
