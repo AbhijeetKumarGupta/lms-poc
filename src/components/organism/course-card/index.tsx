@@ -96,27 +96,25 @@ const CourseCard = memo(function CourseCard({
         sx={{ display: 'flex', justifyContent: 'space-between', width: '100%', px: 2, pb: 2 }}
         disableSpacing
       >
-        {showEnrollButton && (
-          <Box sx={{ display: 'flex', gap: 1 }}>
-            {isEnrolled ? (
-              <>
-                <Button
-                  disabled={isSubmitting}
-                  variant="contained"
-                  color="success"
-                  onClick={handleViewClick}
-                >
-                  View
-                </Button>
-                <Button
-                  loading={isSubmitting}
-                  variant="outlined"
-                  color="error"
-                  onClick={handleUnenrollClick}
-                >
-                  Unenroll
-                </Button>
-              </>
+        <Box sx={{ display: 'flex', gap: 1 }}>
+          <Button
+            disabled={isSubmitting}
+            variant="contained"
+            color="success"
+            onClick={handleViewClick}
+          >
+            View
+          </Button>
+          {showEnrollButton &&
+            (isEnrolled ? (
+              <Button
+                loading={isSubmitting}
+                variant="outlined"
+                color="error"
+                onClick={handleUnenrollClick}
+              >
+                Unenroll
+              </Button>
             ) : (
               user?.role === USER_ROLES.STUDENT && (
                 <Button
@@ -128,9 +126,8 @@ const CourseCard = memo(function CourseCard({
                   Enroll
                 </Button>
               )
-            )}
-          </Box>
-        )}
+            ))}
+        </Box>
         <Box sx={{ display: 'flex', gap: 1 }}>
           <IconButton aria-label="add to favorites" onClick={onFavorite}>
             <FavoriteIcon />

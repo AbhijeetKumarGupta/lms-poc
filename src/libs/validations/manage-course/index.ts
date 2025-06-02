@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 
-export const schema = yup
+export const manageCourseSchema = yup
   .object({
     title: yup.string().required('Title is required'),
     image: yup.string().url('Image must be a valid URL').required('Image URL is required'),

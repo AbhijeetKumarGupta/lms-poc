@@ -7,7 +7,7 @@ import { DrawerItem } from '@/libs/types/drawer';
 
 export const getDrawerItems = (role?: string): DrawerItem[] => {
   const commonItems = [
-    { text: 'All Courses', icon: <AppsIcon />, url: '/' },
+    { text: 'All Courses', icon: <AppsIcon />, url: '/dashboard' },
     { text: 'My Courses', icon: <AppRegistrationIcon />, url: '/my-courses' },
   ];
 

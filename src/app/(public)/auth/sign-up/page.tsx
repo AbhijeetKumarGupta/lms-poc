@@ -54,9 +54,10 @@ export default function SignUpForm() {
     <Box
       component="form"
       onSubmit={handleSubmit(onSubmit)}
-      sx={{ maxWidth: 400, mx: 'auto', mt: 4 }}
+      sx={{ maxWidth: 400, mx: 'auto', display: 'flex', height: '70vh' }}
+      alignItems="center"
     >
-      <Stack spacing={2}>
+      <Stack spacing={2} width="100%">
         <Typography variant="h4">Sign Up</Typography>
 
         {serverError && <Typography color="error">{serverError}</Typography>}

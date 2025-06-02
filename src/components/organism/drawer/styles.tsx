@@ -9,8 +9,6 @@ export const StyledDrawerContent = styled(Box, {
   open: boolean;
 }>(({ isDesktop, open, theme }) => ({
   flexGrow: 1,
-  padding: theme.spacing(3),
-  marginTop: '65px',
   marginLeft: isDesktop && open ? `${drawerWidth}px` : 0,
   transition: theme.transitions.create(['margin'], {
     easing: theme.transitions.easing.sharp,

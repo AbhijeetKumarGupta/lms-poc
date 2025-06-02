@@ -18,7 +18,7 @@ import CustomSwitch from '@/components/atom/custom-switch';
 import { StyledSignInLogoutButton, StyledSignUpButton, switchControllerStyles } from './styles';
 
 interface TopBarProps {
-  onMenuClick: () => void;
+  onMenuClick?: () => void;
 }
 
 export default function TopBar({ onMenuClick }: TopBarProps) {
@@ -50,7 +50,11 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
         />
         {!session ? (
           <Box display="flex" gap={2}>
-            <StyledSignInLogoutButton onClick={() => signIn()}>Sign In</StyledSignInLogoutButton>
+            <StyledSignInLogoutButton
+              onClick={() => signIn(undefined, { callbackUrl: '/dashboard' })}
+            >
+              Sign In
+            </StyledSignInLogoutButton>
             <StyledSignUpButton onClick={() => router.push('/auth/sign-up')}>
               Sign Up
             </StyledSignUpButton>

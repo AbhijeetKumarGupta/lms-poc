@@ -1,11 +1,11 @@
 'use client';
 
-import { useUser } from '@clerk/nextjs';
+import { useSession } from 'next-auth/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Button, Stack, TextField } from '@mui/material';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-import { schema } from './helper';
+import { manageCourseSchema } from '@/libs/validations/manage-course';
 
 export interface CourseFormValues {
   title: string;
@@ -24,7 +24,8 @@ interface CourseFormProps {
 }
 
 export default function CourseForm({ initialValues, onSubmit }: CourseFormProps) {
-  const { user } = useUser();
+  const { data: session } = useSession();
+  const user = session?.user;
   const currentDate = new Date().toISOString().split('T')[0];
 
   const {
@@ -32,14 +33,14 @@ export default function CourseForm({ initialValues, onSubmit }: CourseFormProps)
     handleSubmit: formSubmit,
     formState: { errors, isSubmitting },
   } = useForm<CourseFormValues>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(manageCourseSchema),
     defaultValues: initialValues || {
       title: '',
       image: '',
       description: '',
       creator: {
-        name: typeof user?.unsafeMetadata?.name === 'string' ? user.unsafeMetadata.name : '',
-        avatar: typeof user?.unsafeMetadata?.avatar === 'string' ? user.unsafeMetadata.avatar : '',
+        name: typeof user?.name === 'string' ? user.name : '',
+        avatar: typeof user?.image === 'string' ? user.image : '',
         dateOfCreation: currentDate,
       },
     },

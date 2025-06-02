@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
-import { ClerkProvider } from '@clerk/nextjs';
+import { Box } from '@mui/material';
 
-import { ThemeContextProvider } from '@/components/others/theme-context-provider';
-import LayoutRenderer from '@/components/organism/layout-renderer';
+import { getSession } from '@/libs/session';
+import Providers from '@/components/others/providers';
 
 import './globals.css';
 
@@ -22,20 +22,14 @@ export const metadata: Metadata = {
   description: 'Learn Before You Earn',
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const session = await getSession();
+
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <body className={`${geistSans.variable} ${geistMono.variable}`}>
-          <ThemeContextProvider>
-            <LayoutRenderer>{children}</LayoutRenderer>
-          </ThemeContextProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+    <html lang="en">
+      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        <Providers session={session}>{<Box margin="70px 20px">{children}</Box>}</Providers>
+      </body>
+    </html>
   );
 }

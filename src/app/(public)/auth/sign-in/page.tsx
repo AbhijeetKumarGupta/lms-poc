@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Button, Stack, TextField, Typography } from '@mui/material';
 import { signIn } from 'next-auth/react';
@@ -15,6 +15,7 @@ export interface SignInFormValues {
 }
 
 export default function SignInForm() {
+  const searchParams = useSearchParams();
   const {
     register,
     handleSubmit,
@@ -26,21 +27,20 @@ export default function SignInForm() {
       password: '',
     },
   });
-  const router = useRouter();
   const [serverError, setServerError] = useState('');
 
   const onSubmit: SubmitHandler<SignInFormValues> = async data => {
     setServerError('');
+    const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
 
     const result = await signIn('credentials', {
       ...data,
-      redirect: false,
+      redirect: true,
+      callbackUrl,
     });
 
     if (result?.error) {
       setServerError(result.error);
-    } else {
-      router.replace('/');
     }
   };
 
@@ -48,9 +48,10 @@ export default function SignInForm() {
     <Box
       component="form"
       onSubmit={handleSubmit(onSubmit)}
-      sx={{ maxWidth: 400, mx: 'auto', mt: 4 }}
+      sx={{ maxWidth: 400, mx: 'auto', display: 'flex', height: '70vh' }}
+      alignItems="center"
     >
-      <Stack spacing={2}>
+      <Stack spacing={2} width="100%">
         <Typography variant="h4">Sign In</Typography>
 
         {serverError && <Typography color="error">{serverError}</Typography>}
