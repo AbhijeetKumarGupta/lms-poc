@@ -1,18 +1,21 @@
 'use client';
 
-import { memo, useCallback } from 'react';
-import Image from 'next/image';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
+import { Box } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import { Box } from '@mui/material';
+import { useSession } from 'next-auth/react';
+import Image from 'next/image';
+import { memo, useCallback } from 'react';
+
+import { USER_ROLES } from '@/constants';
 
 interface CourseCardProps {
   showEnrollButton: boolean;
@@ -49,6 +52,9 @@ const CourseCard = memo(function CourseCard({
   isFirstCard = false,
   isSubmitting,
 }: CourseCardProps) {
+  const { data: session } = useSession();
+  const user = session?.user;
+
   const handleEnrollClick = useCallback(() => {
     onEnroll?.();
   }, [onEnroll]);
@@ -112,14 +118,16 @@ const CourseCard = memo(function CourseCard({
                 </Button>
               </>
             ) : (
-              <Button
-                loading={isSubmitting}
-                variant="contained"
-                color="primary"
-                onClick={handleEnrollClick}
-              >
-                Enroll
-              </Button>
+              user?.role === USER_ROLES.STUDENT && (
+                <Button
+                  loading={isSubmitting}
+                  variant="contained"
+                  color="primary"
+                  onClick={handleEnrollClick}
+                >
+                  Enroll
+                </Button>
+              )
             )}
           </Box>
         )}

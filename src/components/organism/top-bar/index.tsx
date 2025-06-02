@@ -56,7 +56,9 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
             </StyledSignUpButton>
           </Box>
         ) : (
-          <StyledSignInLogoutButton onClick={() => signOut()}>Logout</StyledSignInLogoutButton>
+          <StyledSignInLogoutButton onClick={() => signOut({ callbackUrl: '/' })}>
+            Logout
+          </StyledSignInLogoutButton>
         )}
       </Toolbar>
     </AppBar>
