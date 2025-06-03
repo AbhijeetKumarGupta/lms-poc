@@ -11,7 +11,7 @@ import { enrollUser, unenrollUser, getUserEnrollments } from '@/libs/services/en
 
 type EnrollmentMap = Record<string, string>;
 
-export const CoursesContainer = () => {
+export const CoursesContainer = ({ title }: { title: string }) => {
   const { data: session } = useSession();
   const router = useRouter();
   const pathname = usePathname();
@@ -127,7 +127,7 @@ export const CoursesContainer = () => {
 
   return (
     <Stack gap={2}>
-      <Typography variant="h5">{isMyCourses ? 'My Courses' : 'All Courses'}</Typography>
+      <Typography variant="h5">{title}</Typography>
       <Divider />
       <Box display="flex" justifyContent="center" flexWrap="wrap" gap={2}>
         {courseCards}

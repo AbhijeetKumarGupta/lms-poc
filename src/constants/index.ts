@@ -3,6 +3,8 @@ export enum USER_ROLES {
   STUDENT = 'student',
 }
 
+export const PROTECTED_ROUTES = ['/dashboard', '/manage-course', '/my-courses'];
+
 // TODO: Delete this after testing
 export const courses = [
   {

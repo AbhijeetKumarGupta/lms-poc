@@ -20,10 +20,9 @@ export interface CourseFormValues {
 
 interface CourseFormProps {
   initialValues?: CourseFormValues;
-  onSubmit: (values: CourseFormValues) => void;
 }
 
-export default function CourseForm({ initialValues, onSubmit }: CourseFormProps) {
+export default function CourseForm({ initialValues }: CourseFormProps) {
   const { data: session } = useSession();
   const user = session?.user;
   const currentDate = new Date().toISOString().split('T')[0];
@@ -47,7 +46,7 @@ export default function CourseForm({ initialValues, onSubmit }: CourseFormProps)
   });
 
   const onSubmitForm: SubmitHandler<CourseFormValues> = values => {
-    onSubmit(values);
+    console.log(values);
   };
 
   return (

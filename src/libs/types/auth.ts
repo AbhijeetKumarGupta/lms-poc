@@ -4,3 +4,8 @@ export interface SignUpFormValues {
   password: string;
   role: 'teacher' | 'student';
 }
+
+export interface SignInFormValues {
+  email: string;
+  password: string;
+}

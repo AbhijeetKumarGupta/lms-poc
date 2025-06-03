@@ -1,5 +1,5 @@
 import { CoursesContainer } from '@/components/others/courses-container';
 
-export default function MyCourses() {
-  return <CoursesContainer />;
+export default async function MyCourses() {
+  return <CoursesContainer title="My Courses" />;
 }

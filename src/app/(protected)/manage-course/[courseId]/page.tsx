@@ -1,4 +1,4 @@
-import CourseForm, { CourseFormValues } from '@/components/organism/course-form';
+import CourseForm, { CourseFormValues } from '@/components/others/course-form';
 
 interface EditCoursePageProps {
   params: Promise<{
@@ -6,19 +6,14 @@ interface EditCoursePageProps {
   }>;
 }
 
-async function getCourseById(courseId: string): Promise<CourseFormValues> {
+async function getCourseById(courseId: string): Promise<{ data: CourseFormValues }> {
   //TODO: Implement fetch logic
-  return { courseId } as unknown as CourseFormValues;
+  return { courseId } as unknown as { data: CourseFormValues };
 }
 
 export default async function EditCoursePage({ params }: EditCoursePageProps) {
   const { courseId } = await params;
-  const course = await getCourseById(courseId);
+  const { data: course } = await getCourseById(courseId);
 
-  const handleUpdate = async (values: CourseFormValues) => {
-    //TODO: Implement update logic here
-    console.log({ values });
-  };
-
-  return <CourseForm initialValues={course} onSubmit={handleUpdate} />;
+  return <CourseForm initialValues={course} />;
 }

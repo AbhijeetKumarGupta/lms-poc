@@ -1,12 +1,5 @@
-'use client';
+import CourseForm from '@/components/others/course-form';
 
-import CourseForm, { CourseFormValues } from '@/components/organism/course-form';
-
-export default function AddCoursePage() {
-  const handleCreate = async (values: CourseFormValues) => {
-    //TODO: Add submission logic
-    console.log({ values });
-  };
-
-  return <CourseForm onSubmit={handleCreate} />;
+export default async function AddCoursePage() {
+  return <CourseForm />;
 }

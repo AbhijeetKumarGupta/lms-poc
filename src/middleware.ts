@@ -1,12 +1,25 @@
-import { clerkMiddleware } from '@clerk/nextjs/server';
+import { getToken } from 'next-auth/jwt';
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+import { PROTECTED_ROUTES } from '@/constants';
 
-export default clerkMiddleware();
+export async function middleware(req: NextRequest) {
+  const { pathname } = req.nextUrl;
 
-export const config = {
-  matcher: [
-    // Skip Next.js internals and all static files, unless found in search params
-    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
-    // Always run for API routes
-    '/(api|trpc)(.*)',
-  ],
-};
+  const isSignInPage = pathname === '/auth/sign-in';
+
+  const token = await getToken({ req, secret: process.env.CLERK_SECRET_KEY });
+
+  const isAuthPage = pathname.startsWith('/auth');
+  const isProtectedRoute = PROTECTED_ROUTES.some(route => pathname.startsWith(route));
+
+  if (token && isAuthPage && !isSignInPage) {
+    return NextResponse.redirect(new URL('/dashboard', req.url));
+  }
+
+  if (!token && isProtectedRoute && !isSignInPage) {
+    return NextResponse.redirect(new URL('/auth/sign-in', req.url));
+  }
+
+  return NextResponse.next();
+}
