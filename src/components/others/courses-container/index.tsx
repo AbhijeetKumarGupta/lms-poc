@@ -93,9 +93,9 @@ export const CoursesContainer = ({ title }: { title: string }) => {
 
   const handleView = useCallback(
     (courseId: string) => {
-      router.push(`/courses/${courseId}`);
+      router.push(`/${user ? 'course-details' : 'course'}/${courseId}`);
     },
-    [router]
+    [router, user]
   );
 
   const courseCards = useMemo(() => {
