@@ -1,6 +1,5 @@
 'use client';
 
-import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import { Box } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
@@ -18,6 +17,7 @@ import { memo, useCallback } from 'react';
 import { USER_ROLES } from '@/constants';
 
 interface CourseCardProps {
+  id: string;
   showEnrollButton: boolean;
   title: string;
   image: string;
@@ -31,13 +31,13 @@ interface CourseCardProps {
   onEnroll: () => void;
   onUnenroll?: () => void;
   onView: () => void;
-  onFavorite?: () => void;
   onShare?: () => void;
   isFirstCard?: boolean;
   isSubmitting?: boolean;
 }
 
 const CourseCard = memo(function CourseCard({
+  id,
   showEnrollButton,
   title,
   image,
@@ -47,7 +47,6 @@ const CourseCard = memo(function CourseCard({
   onEnroll,
   onUnenroll,
   onView,
-  onFavorite,
   onShare,
   isFirstCard = false,
   isSubmitting,
@@ -66,6 +65,23 @@ const CourseCard = memo(function CourseCard({
   const handleViewClick = useCallback(() => {
     onView?.();
   }, [onView]);
+
+  const handleShare = useCallback(async () => {
+    if (onShare) {
+      onShare();
+    } else {
+      try {
+        const shareData = {
+          title: title,
+          text: description,
+          url: `${process.env.NEXT_PUBLIC_APP_URL}/course/${id}`,
+        };
+        await navigator.share(shareData);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  }, [title, description, id, onShare]);
 
   return (
     <Card sx={{ maxWidth: 330, position: 'relative', minHeight: 420 }}>
@@ -129,10 +145,7 @@ const CourseCard = memo(function CourseCard({
             ))}
         </Box>
         <Box sx={{ display: 'flex', gap: 1 }}>
-          <IconButton aria-label="add to favorites" onClick={onFavorite}>
-            <FavoriteIcon />
-          </IconButton>
-          <IconButton aria-label="share" onClick={onShare}>
+          <IconButton aria-label="share" onClick={handleShare}>
             <ShareIcon />
           </IconButton>
         </Box>
