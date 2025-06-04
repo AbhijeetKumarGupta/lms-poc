@@ -1,4 +1,6 @@
-export async function fetchCourseById(courseId: number): Promise<Any> {
+import { Course } from '@/libs/types/course';
+
+export async function fetchCourseById(courseId: number): Promise<Course> {
   const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/course/${courseId}`, {
     method: 'GET',
     headers: {

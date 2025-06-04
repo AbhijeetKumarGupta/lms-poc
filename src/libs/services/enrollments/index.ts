@@ -1,6 +1,6 @@
-import { EnrollmentPayload } from '@/libs/types/enrollments';
+import { EnrollmentPayload, EnrollmentResponse } from '@/libs/types/enrollments';
 
-export async function enrollUser(data: EnrollmentPayload): Promise<Any> {
+export async function enrollUser(data: EnrollmentPayload): Promise<EnrollmentResponse> {
   const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/enrollments`, {
     method: 'POST',
     body: JSON.stringify(data),
@@ -28,7 +28,7 @@ export async function unenrollUser(enrollmentId: string): Promise<void> {
   }
 }
 
-export async function getUserEnrollments(userId: string): Promise<Any[]> {
+export async function getUserEnrollments(userId: string): Promise<EnrollmentPayload[]> {
   const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/enrollments/user/${userId}`);
 
   if (!res.ok) {

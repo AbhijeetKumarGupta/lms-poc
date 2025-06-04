@@ -1,4 +1,6 @@
-import CourseForm, { CourseFormValues } from '@/components/others/course-form';
+import CourseForm from '@/components/others/course-form';
+import { fetchCourseById } from '@/libs/services/course';
+import { Course } from '@/libs/types/course';
 
 interface EditCoursePageProps {
   params: Promise<{
@@ -6,14 +8,14 @@ interface EditCoursePageProps {
   }>;
 }
 
-async function getCourseById(courseId: string): Promise<{ data: CourseFormValues }> {
-  //TODO: Implement fetch logic
-  return { courseId } as unknown as { data: CourseFormValues };
+async function getCourseById(courseId: string): Promise<Course> {
+  const data = await fetchCourseById(Number(courseId));
+  return data;
 }
 
 export default async function EditCoursePage({ params }: EditCoursePageProps) {
   const { courseId } = await params;
-  const { data: course } = await getCourseById(courseId);
+  const course = await getCourseById(courseId);
 
   return <CourseForm initialValues={course} />;
 }

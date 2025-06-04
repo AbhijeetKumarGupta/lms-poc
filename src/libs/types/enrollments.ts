@@ -3,3 +3,7 @@ export interface EnrollmentPayload {
   courseId: string;
   enrolledAt: string;
 }
+
+export interface EnrollmentResponse {
+  data: { id: string } & EnrollmentPayload;
+}

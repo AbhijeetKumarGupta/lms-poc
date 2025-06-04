@@ -6,20 +6,10 @@ import { Box, Button, Stack, TextField } from '@mui/material';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { manageCourseSchema } from '@/libs/validations/manage-course';
-
-export interface CourseFormValues {
-  title: string;
-  image: string;
-  description: string;
-  creator: {
-    name: string;
-    avatar: string;
-    dateOfCreation: string;
-  };
-}
+import { Course } from '@/libs/types/course';
 
 interface CourseFormProps {
-  initialValues?: CourseFormValues;
+  initialValues?: Course;
 }
 
 export default function CourseForm({ initialValues }: CourseFormProps) {
@@ -31,12 +21,13 @@ export default function CourseForm({ initialValues }: CourseFormProps) {
     register,
     handleSubmit: formSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<CourseFormValues>({
+  } = useForm<Course>({
     resolver: yupResolver(manageCourseSchema),
     defaultValues: initialValues || {
       title: '',
       image: '',
       description: '',
+      sections: [],
       creator: {
         name: typeof user?.name === 'string' ? user.name : '',
         avatar: typeof user?.image === 'string' ? user.image : '',
@@ -45,7 +36,7 @@ export default function CourseForm({ initialValues }: CourseFormProps) {
     },
   });
 
-  const onSubmitForm: SubmitHandler<CourseFormValues> = values => {
+  const onSubmitForm: SubmitHandler<Course> = values => {
     console.log(values);
   };
 
