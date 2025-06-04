@@ -10,6 +10,7 @@ export async function middleware(req: NextRequest) {
   const isRootPath = pathname === '/';
   const isSignInPage = pathname === '/auth/sign-in';
   const isAuthPage = pathname.startsWith('/auth');
+  const isCourseDetailsPage = pathname.startsWith('/course/');
   const isProtectedRoute = PROTECTED_ROUTES.some(route => pathname.startsWith(route));
 
   // Redirect authenticated users away from "/" and "/auth"
@@ -20,6 +21,11 @@ export async function middleware(req: NextRequest) {
   // Redirect unauthenticated users trying to access protected routes
   if (!token && !isRootPath && isProtectedRoute && !isSignInPage) {
     return NextResponse.redirect(new URL('/auth/sign-in', req.url));
+  }
+
+  // Redirect authenticated users to correct course details route
+  if (token && isCourseDetailsPage) {
+    return NextResponse.redirect(new URL(pathname?.replace('course', 'course-details'), req.url));
   }
 
   return NextResponse.next();
