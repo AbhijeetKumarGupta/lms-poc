@@ -2,15 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import { Box, Typography, CircularProgress, Divider, Paper, useTheme } from '@mui/material';
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 import { fetchCourseById } from '@/libs/services/course';
+import { Course, Section } from '@/libs/types/course';
 
-interface Section {
-  id: number;
-  title: string;
-  description: string;
-  videoUrl: string;
-}
+import { StyledEditButton } from './styles';
 
 interface CourseDetailsProps {
   courseId: number;
@@ -18,8 +16,10 @@ interface CourseDetailsProps {
 
 const CourseDetails = ({ courseId }: CourseDetailsProps) => {
   const theme = useTheme();
+  const router = useRouter();
+  const { data: session } = useSession();
 
-  const [courseData, setCourseData] = useState<Any>(null);
+  const [courseData, setCourseData] = useState<Course | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
 
@@ -39,6 +39,12 @@ const CourseDetails = ({ courseId }: CourseDetailsProps) => {
     loadCourse();
   }, [courseId]);
 
+  const handleEditClick = () => {
+    router.push(`/manage-course/${courseId}`);
+  };
+
+  const isCreator = session?.user?.id === courseData?.creator?.id;
+
   if (error) {
     return (
       <Box sx={{ p: 4 }}>
@@ -57,13 +63,25 @@ const CourseDetails = ({ courseId }: CourseDetailsProps) => {
 
   return (
     <Box sx={{ maxWidth: 900, mx: 'auto', p: { xs: 2, md: 4 } }}>
-      <Typography
-        variant="h3"
-        gutterBottom
-        sx={{ fontWeight: 600, color: theme.palette.text.primary }}
-      >
-        {courseData?.title}
-      </Typography>
+      <Box display="flex" alignItems="center" justifyContent="space-between">
+        <Typography
+          variant="h3"
+          gutterBottom
+          sx={{ fontWeight: 600, color: theme.palette.text.primary }}
+        >
+          {courseData?.title}
+        </Typography>
+        {isCreator && (
+          <StyledEditButton
+            variant="contained"
+            color="primary"
+            size="small"
+            onClick={handleEditClick}
+          >
+            Edit
+          </StyledEditButton>
+        )}
+      </Box>
       <Typography
         variant="body1"
         sx={{
@@ -77,6 +95,7 @@ const CourseDetails = ({ courseId }: CourseDetailsProps) => {
       </Typography>
 
       <Divider sx={{ my: 3 }} />
+
       {courseData?.sections?.map((section: Section, index: number) => (
         <Paper
           key={section.id}

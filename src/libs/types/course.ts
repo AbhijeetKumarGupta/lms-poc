@@ -16,5 +16,10 @@ export interface Course {
   teacherId?: number | string;
   createdAt?: string;
   updatedAt?: string;
-  sections: Omit<Section, 'id' | 'createdAt' | 'updatedAt'>[];
+  sections: Section[];
+  creator?: {
+    id?: string;
+    name?: string;
+    email?: string;
+  };
 }
