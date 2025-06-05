@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import { Box } from '@mui/material';
 
 import { getSession } from '@/libs/session';
-import Providers from '@/components/others/providers';
+import Providers from '@/components/organism/providers';
 
 import './globals.css';
 

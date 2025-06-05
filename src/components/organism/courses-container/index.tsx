@@ -5,9 +5,10 @@ import { Box, Divider, Stack, Typography } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 
-import CourseCard from '@/components/organism/course-card';
-import { courses, USER_ROLES } from '@/constants';
+import CourseCard from '@/components/molecule/course-card';
+import { USER_ROLES } from '@/constants';
 import { enrollUser, unenrollUser, getUserEnrollments } from '@/libs/services/enrollments';
+import { getCourses } from '@/libs/services/course';
 
 type EnrollmentMap = Record<string, string>;
 
@@ -15,6 +16,7 @@ export const CoursesContainer = ({ title }: { title: string }) => {
   const { data: session } = useSession();
   const router = useRouter();
   const pathname = usePathname();
+  const [courses, setCourses] = useState<Array<Any>>([]);
   const [submitting, setSubmitting] = useState<Array<string>>([]);
   const [enrolledCourseIds, setEnrolledCourseIds] = useState<string[]>([]);
   const [enrollmentMap, setEnrollmentMap] = useState<EnrollmentMap>({});
@@ -23,12 +25,25 @@ export const CoursesContainer = ({ title }: { title: string }) => {
   const user = session?.user;
 
   useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const fetchedCourses = await getCourses();
+        setCourses(fetchedCourses);
+      } catch (err) {
+        console.error('Failed to fetch courses', err);
+      }
+    };
+
+    fetchCourses();
+  }, []);
+
+  useEffect(() => {
     const fetchEnrollments = async () => {
       if (!user?.id) return;
 
       try {
         const enrollments = await getUserEnrollments(user.id);
-        const courseIds = enrollments?.map?.((e: Any) => e.courseId?.toString?.());
+        const courseIds = enrollments?.map?.((e: Any) => e.courseId);
         const map: EnrollmentMap = {};
         enrollments?.forEach?.((e: Any) => {
           map[e.courseId] = e.id;
@@ -123,7 +138,16 @@ export const CoursesContainer = ({ title }: { title: string }) => {
         />
       );
     });
-  }, [isMyCourses, enrolledCourseIds, handleEnroll, handleUnenroll, handleView, user, submitting]);
+  }, [
+    isMyCourses,
+    enrolledCourseIds,
+    handleEnroll,
+    handleUnenroll,
+    handleView,
+    user,
+    submitting,
+    courses,
+  ]);
 
   return (
     <Stack gap={2}>

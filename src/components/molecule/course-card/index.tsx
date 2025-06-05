@@ -12,9 +12,10 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
-import { memo, useCallback } from 'react';
+import { memo, useCallback, useMemo } from 'react';
 
 import { USER_ROLES } from '@/constants';
+import { getShortName } from '@/libs/utils';
 
 interface CourseCardProps {
   id: string;
@@ -22,9 +23,9 @@ interface CourseCardProps {
   title: string;
   image: string;
   description: string;
+  createdAt: string;
   creator: {
     name: string;
-    dateOfCreation: string;
     avatar: string;
   };
   isEnrolled: boolean;
@@ -42,6 +43,7 @@ const CourseCard = memo(function CourseCard({
   title,
   image,
   description,
+  createdAt,
   creator,
   isEnrolled,
   onEnroll,
@@ -53,6 +55,15 @@ const CourseCard = memo(function CourseCard({
 }: CourseCardProps) {
   const { data: session } = useSession();
   const user = session?.user;
+  const creationDate = useMemo(
+    () =>
+      new Date(createdAt).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      }),
+    [createdAt]
+  );
 
   const handleEnrollClick = useCallback(() => {
     onEnroll?.();
@@ -83,16 +94,18 @@ const CourseCard = memo(function CourseCard({
     }
   }, [title, description, id, onShare]);
 
+  const creatorNameShort = useMemo(() => getShortName(creator?.name), [creator]);
+
   return (
-    <Card sx={{ maxWidth: 330, position: 'relative', minHeight: 420 }}>
+    <Card sx={{ width: 330, position: 'relative', minHeight: 420 }}>
       <CardHeader
         avatar={
           <Avatar src={creator?.avatar} aria-label={creator?.name}>
-            {creator?.name?.[0]}
+            {creatorNameShort}
           </Avatar>
         }
         title={title}
-        subheader={`${creator?.name} • ${creator?.dateOfCreation}`}
+        subheader={`${creator?.name} • ${creationDate}`}
       />
       <Box sx={{ position: 'relative', height: 194 }}>
         <Image

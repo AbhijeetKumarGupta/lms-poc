@@ -1,4 +1,4 @@
-import CourseForm from '@/components/others/course-form';
+import CourseForm from '@/components/organism/course-form';
 import { fetchCourseById } from '@/libs/services/course';
 import { Course } from '@/libs/types/course';
 

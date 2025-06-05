@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -7,13 +8,14 @@ import AppBar from '@mui/material/AppBar';
 import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { Box } from '@mui/material';
+import { Avatar, Box, Tooltip } from '@mui/material';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 
 import { useTheme } from '@/hooks/useTheme';
 import { THEME } from '@/constants/theme';
 import CustomSwitch from '@/components/atom/custom-switch';
+import { getShortName } from '@/libs/utils';
 
 import { StyledSignInLogoutButton, StyledSignUpButton, switchControllerStyles } from './styles';
 
@@ -25,7 +27,10 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
   const router = useRouter();
   const { theme, changeTheme } = useTheme();
   const { data: session } = useSession();
-  const role = session?.user?.role;
+  const user = session?.user;
+  const role = user?.role;
+
+  const userNameShort = useMemo(() => getShortName(user?.name), [user]);
 
   return (
     <AppBar position="fixed" sx={{ zIndex: theme => theme.zIndex.drawer + 1 }}>
@@ -60,9 +65,14 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
             </StyledSignUpButton>
           </Box>
         ) : (
-          <StyledSignInLogoutButton onClick={() => signOut({ callbackUrl: '/auth/sign-in' })}>
-            Logout
-          </StyledSignInLogoutButton>
+          <Box display="flex" gap={2} alignItems="center">
+            <StyledSignInLogoutButton onClick={() => signOut({ callbackUrl: '/auth/sign-in' })}>
+              Logout
+            </StyledSignInLogoutButton>
+            <Tooltip title={user?.name}>
+              <Avatar src={user?.image ?? undefined}>{userNameShort ?? 'U'}</Avatar>
+            </Tooltip>
+          </Box>
         )}
       </Toolbar>
     </AppBar>

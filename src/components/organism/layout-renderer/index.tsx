@@ -4,7 +4,7 @@ import { useState, useCallback, useMemo } from 'react';
 import { useSession } from 'next-auth/react';
 
 import TopBar from '@/components/organism/top-bar';
-import ResponsiveDrawer from '@/components/organism/drawer';
+import ResponsiveDrawer from '@/components/molecule/drawer';
 import { getDrawerItems } from '@/libs/utils/getDrawerItems';
 
 export default function LayoutRenderer({ children }: { children: React.ReactNode }) {

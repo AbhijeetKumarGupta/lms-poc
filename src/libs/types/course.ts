@@ -13,13 +13,8 @@ export interface Course {
   title: string;
   image: string;
   description: string;
-  teacherId?: number;
+  teacherId?: number | string;
   createdAt?: string;
   updatedAt?: string;
   sections: Omit<Section, 'id' | 'createdAt' | 'updatedAt'>[];
-  creator: {
-    name: string;
-    avatar: string;
-    dateOfCreation: string;
-  };
 }

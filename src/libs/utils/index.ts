@@ -28,3 +28,12 @@ export const safelySetLocalStorageItem = <T>(key: string, value: T): void => {
     console.error(`Error setting localStorage item: ${error}`);
   }
 };
+
+export const getShortName = (name?: string | null): string => {
+  if (!name) return '';
+  return name
+    ?.split?.(' ')
+    ?.slice?.(0, 2)
+    ?.map?.(str => str?.[0])
+    ?.join?.('');
+};
