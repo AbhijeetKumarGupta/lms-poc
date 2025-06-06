@@ -9,7 +9,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 import { manageCourseSchema } from '@/libs/validations/manage-course';
 import { Course } from '@/libs/types/course';
-import { createCourse } from '@/libs/services/course';
+import { createCourse, updateCourse } from '@/libs/services/course';
 
 interface CourseFormProps {
   initialValues?: Course;
@@ -43,14 +43,22 @@ export default function CourseForm({ initialValues }: CourseFormProps) {
 
   const onSubmit: SubmitHandler<Course> = async values => {
     try {
-      const res = await createCourse(values);
+      let res;
+
+      if (initialValues?.id) {
+        res = await updateCourse(initialValues.id, values);
+      } else {
+        res = await createCourse(values);
+      }
+
       if (!res?.success) {
-        window.alert('Failed to create course');
+        window.alert(`Failed to ${initialValues?.id ? 'update' : 'create'} course`);
       } else {
         router.push(`/course-details/${res?.data?.id}`);
       }
     } catch (error) {
-      console.error('Course creation error:', error);
+      console.error('Course form error:', error);
+      window.alert('Something went wrong. Check console for details.');
     }
   };
 
@@ -138,7 +146,7 @@ export default function CourseForm({ initialValues }: CourseFormProps) {
         <Divider />
 
         <Button type="submit" variant="contained" disabled={isSubmitting}>
-          {initialValues ? 'Update Course' : 'Create Course'}
+          {initialValues?.id ? 'Update Course' : 'Create Course'}
         </Button>
       </Stack>
     </Box>

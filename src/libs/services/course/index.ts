@@ -41,3 +41,18 @@ export async function createCourse(course: Course) {
 
   return await res.json();
 }
+
+export async function updateCourse(courseId: string | number, course: Course) {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/course/${courseId}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(course),
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json();
+    throw new Error(errorData.message || 'Failed to update course.');
+  }
+
+  return await res.json();
+}
