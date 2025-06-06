@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+const BASE_API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export async function GET() {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/courses`);
+    const res = await fetch(`${BASE_API_URL}/api/courses`);
     if (!res.ok) {
       const errorData = await res.json();
       return NextResponse.json(
@@ -21,7 +23,7 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/courses`, {
+    const res = await fetch(`${BASE_API_URL}/api/courses`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
