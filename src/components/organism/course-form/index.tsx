@@ -68,6 +68,21 @@ export default function CourseForm({ initialValues }: CourseFormProps) {
       onSubmit={handleSubmit(onSubmit)}
       sx={{ maxWidth: 800, mx: 'auto', mt: 4 }}
     >
+      <Box display="flex" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
+        <Box display="flex" alignItems="baseline" justifyContent="center" gap={0}>
+          <Button
+            sx={{ color: 'red', fontSize: 30, backgroundColor: 'transparent' }}
+            variant="text"
+            onClick={() => router.back()}
+          >
+            ←
+          </Button>
+          <Typography variant="h4" gutterBottom sx={{ fontWeight: 600 }}>
+            {initialValues?.id ? 'Edit Form' : 'Add Form'}
+          </Typography>
+        </Box>
+      </Box>
+      <Divider sx={{ marginBottom: 2 }} />
       <Stack spacing={3}>
         <Typography variant="h5">Course Details</Typography>
 

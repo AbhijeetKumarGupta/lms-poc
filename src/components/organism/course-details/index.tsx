@@ -139,19 +139,34 @@ const CourseDetails = ({ courseId }: CourseDetailsProps) => {
 
   return (
     <Box sx={{ maxWidth: 900, mx: 'auto', p: { xs: 2, md: 4 } }}>
-      <Box display="flex" alignItems="center" justifyContent="space-between">
-        <Typography variant="h3" gutterBottom sx={{ fontWeight: 600 }}>
-          {courseData.title}
-        </Typography>
+      <Box display="flex" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
+        <Box display="flex" alignItems="baseline" gap={0}>
+          <Button
+            sx={{ color: 'red', fontSize: 30, backgroundColor: 'transparent' }}
+            variant="text"
+            onClick={() => router.back()}
+          >
+            ←
+          </Button>
+          <Typography variant="h3" gutterBottom sx={{ fontWeight: 600 }}>
+            {courseData.title}
+          </Typography>
+        </Box>
         {isCreator && (
-          <>
+          <Box display="flex" gap={2}>
             <StyledEditButton onClick={handleEditClick} variant="contained" size="small">
               Edit
             </StyledEditButton>
-            <Button variant="outlined" color="error" size="small" onClick={handleDeleteClick}>
+            <Button
+              sx={{ backgroundColor: 'transparent' }}
+              variant="outlined"
+              color="error"
+              size="small"
+              onClick={handleDeleteClick}
+            >
               Delete
             </Button>
-          </>
+          </Box>
         )}
       </Box>
 
