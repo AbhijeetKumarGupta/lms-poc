@@ -52,3 +52,31 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ cour
     return NextResponse.json({ message: error.message || 'Server error' }, { status: 500 });
   }
 }
+
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: Promise<{ courseId: string }> }
+) {
+  const { courseId } = await params;
+
+  try {
+    const res = await fetch(`${BASE_API_URL}/api/courses/${courseId}`, {
+      method: 'DELETE',
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      return NextResponse.json(
+        { message: errorData.message || 'Failed to delete course' },
+        { status: res.status }
+      );
+    }
+
+    return NextResponse.json({ success: true, message: 'Course deleted successfully' });
+  } catch (error: Any) {
+    return NextResponse.json(
+      { message: error.message || 'Server error while deleting course' },
+      { status: 500 }
+    );
+  }
+}

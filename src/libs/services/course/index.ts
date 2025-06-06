@@ -56,3 +56,16 @@ export async function updateCourse(courseId: string | number, course: Course) {
 
   return await res.json();
 }
+
+export async function deleteCourse(courseId: string | number) {
+  const res = await fetch(`/api/course/${courseId}`, {
+    method: 'DELETE',
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json();
+    throw new Error(errorData.message || 'Failed to delete course.');
+  }
+
+  return await res.json();
+}

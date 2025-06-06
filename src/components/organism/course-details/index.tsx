@@ -14,7 +14,7 @@ import {
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { fetchCourseById } from '@/libs/services/course';
+import { deleteCourse, fetchCourseById } from '@/libs/services/course';
 import { getUserEnrollments } from '@/libs/services/enrollments';
 import { getUserProgress, updateUserProgress } from '@/libs/services/progress';
 import { Course, Section } from '@/libs/types/course';
@@ -102,6 +102,19 @@ const CourseDetails = ({ courseId }: CourseDetailsProps) => {
     [userId, courseId, completedSections]
   );
 
+  const handleDeleteClick = useCallback(async () => {
+    const confirmDelete = window.confirm('Are you sure you want to delete this course?');
+    if (!confirmDelete) return;
+
+    try {
+      await deleteCourse(courseId);
+      router.replace('/dashboard');
+    } catch (error: Any) {
+      console.error('Failed to delete course:', error);
+      alert(error.message || 'Error deleting course.');
+    }
+  }, [router, courseId]);
+
   const isCreator = session?.user?.id === courseData?.creator?.id;
 
   const totalSections = courseData?.sections?.length || 0;
@@ -131,9 +144,14 @@ const CourseDetails = ({ courseId }: CourseDetailsProps) => {
           {courseData.title}
         </Typography>
         {isCreator && (
-          <StyledEditButton onClick={handleEditClick} variant="contained" size="small">
-            Edit
-          </StyledEditButton>
+          <>
+            <StyledEditButton onClick={handleEditClick} variant="contained" size="small">
+              Edit
+            </StyledEditButton>
+            <Button variant="outlined" color="error" size="small" onClick={handleDeleteClick}>
+              Delete
+            </Button>
+          </>
         )}
       </Box>
 
