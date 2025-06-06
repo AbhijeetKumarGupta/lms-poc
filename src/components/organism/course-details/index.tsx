@@ -1,20 +1,11 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-import {
-  Box,
-  Typography,
-  CircularProgress,
-  Divider,
-  Paper,
-  useTheme,
-  LinearProgress,
-  Button,
-} from '@mui/material';
+import { Box, Typography, Divider, Paper, useTheme, LinearProgress, Button } from '@mui/material';
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { deleteCourse, fetchCourseById } from '@/libs/services/course';
+import { deleteCourse } from '@/libs/services/course';
 import { getUserEnrollments } from '@/libs/services/enrollments';
 import { getUserProgress, updateUserProgress } from '@/libs/services/progress';
 import { Course, Section } from '@/libs/types/course';
@@ -22,36 +13,22 @@ import { Course, Section } from '@/libs/types/course';
 import { StyledEditButton } from './styles';
 
 interface CourseDetailsProps {
-  courseId: number;
+  courseData: Course;
 }
 
-const CourseDetails = ({ courseId }: CourseDetailsProps) => {
+const CourseDetails = ({ courseData }: CourseDetailsProps) => {
   const theme = useTheme();
   const router = useRouter();
   const { data: session } = useSession();
 
-  const [courseData, setCourseData] = useState<Course | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>('');
-  const [enrolled, setEnrolled] = useState<boolean>(false);
+  const [enrolled, setEnrolled] = useState(false);
   const [completedSections, setCompletedSections] = useState<number[]>([]);
-  const [markCompleteLoading, setMarkCompleteLoading] = useState<Array<number>>([]);
+  const [markCompleteLoading, setMarkCompleteLoading] = useState<number[]>([]);
 
   const userId = session?.user?.id;
+  const courseId = courseData.id as Any;
 
   useEffect(() => {
-    const loadCourse = async () => {
-      setLoading(true);
-      try {
-        const data = await fetchCourseById(courseId);
-        setCourseData(data);
-      } catch (err: Any) {
-        setError(err.message || 'Error loading course.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
     const checkEnrollmentAndProgress = async () => {
       if (!userId) return;
 
@@ -59,9 +36,9 @@ const CourseDetails = ({ courseId }: CourseDetailsProps) => {
         const enrollments = await getUserEnrollments(userId);
         const isEnrolled = enrollments.some((e: Any) => e.courseId === courseId);
         setEnrolled(isEnrolled);
+
         if (isEnrolled) {
           const { data: progress } = await getUserProgress(userId, courseId);
-
           if (progress) {
             setCompletedSections(progress?.completedSectionIds || []);
           }
@@ -71,7 +48,6 @@ const CourseDetails = ({ courseId }: CourseDetailsProps) => {
       }
     };
 
-    loadCourse();
     checkEnrollmentAndProgress();
   }, [courseId, userId]);
 
@@ -96,7 +72,7 @@ const CourseDetails = ({ courseId }: CourseDetailsProps) => {
       } catch (err) {
         console.error('Failed to update progress:', err);
       } finally {
-        setMarkCompleteLoading(prev => prev?.filter(id => sectionId !== id));
+        setMarkCompleteLoading(prev => prev.filter(id => id !== sectionId));
       }
     },
     [userId, courseId, completedSections]
@@ -121,22 +97,6 @@ const CourseDetails = ({ courseId }: CourseDetailsProps) => {
   const completedCount = completedSections.length;
   const progressPercentage = totalSections ? Math.floor((completedCount / totalSections) * 100) : 0;
 
-  if (error) {
-    return (
-      <Box sx={{ p: 4 }}>
-        <Typography color="error">{error}</Typography>
-      </Box>
-    );
-  }
-
-  if (loading || !courseData) {
-    return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 6 }}>
-        <CircularProgress />
-      </Box>
-    );
-  }
-
   return (
     <Box sx={{ maxWidth: 900, mx: 'auto', p: { xs: 2, md: 4 } }}>
       <Box display="flex" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
@@ -157,13 +117,7 @@ const CourseDetails = ({ courseId }: CourseDetailsProps) => {
             <StyledEditButton onClick={handleEditClick} variant="contained" size="small">
               Edit
             </StyledEditButton>
-            <Button
-              sx={{ backgroundColor: 'transparent' }}
-              variant="outlined"
-              color="error"
-              size="small"
-              onClick={handleDeleteClick}
-            >
+            <Button variant="outlined" color="error" size="small" onClick={handleDeleteClick}>
               Delete
             </Button>
           </Box>
@@ -186,7 +140,7 @@ const CourseDetails = ({ courseId }: CourseDetailsProps) => {
       <Divider sx={{ my: 3 }} />
 
       {courseData.sections.map((section: Section, index: number) => {
-        const sectionId = section.id as Any;
+        const sectionId = section.id as number;
         const isCompleted = completedSections.includes(sectionId);
 
         return (
@@ -230,7 +184,7 @@ const CourseDetails = ({ courseId }: CourseDetailsProps) => {
                 variant="outlined"
                 onClick={() => markSectionComplete(sectionId)}
                 sx={{ mt: 2 }}
-                loading={markCompleteLoading?.includes(sectionId)}
+                disabled={markCompleteLoading.includes(sectionId)}
               >
                 Mark as Complete
               </Button>

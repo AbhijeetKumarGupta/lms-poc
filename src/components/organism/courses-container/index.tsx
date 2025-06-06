@@ -1,109 +1,74 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
 import { Box, Divider, Stack, Typography } from '@mui/material';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 
 import CourseCard from '@/components/molecule/course-card';
 import { USER_ROLES } from '@/constants';
-import { enrollUser, unenrollUser, getUserEnrollments } from '@/libs/services/enrollments';
-import { getCourses } from '@/libs/services/course';
+import { enrollUser, unenrollUser } from '@/libs/services/enrollments';
 
-type EnrollmentMap = Record<string, string>;
+type CoursesContainerProps = {
+  title: string;
+  user?: Any;
+  courses: Any[];
+  enrollments: Any[];
+};
 
-export const CoursesContainer = ({ title }: { title: string }) => {
-  const { data: session } = useSession();
+export const CoursesContainer = ({ title, user, courses, enrollments }: CoursesContainerProps) => {
   const router = useRouter();
   const pathname = usePathname();
-  const [courses, setCourses] = useState<Array<Any>>([]);
-  const [submitting, setSubmitting] = useState<Array<string>>([]);
-  const [enrolledCourseIds, setEnrolledCourseIds] = useState<string[]>([]);
-  const [enrollmentMap, setEnrollmentMap] = useState<EnrollmentMap>({});
-
   const isMyCourses = pathname === '/my-courses';
-  const user = session?.user;
 
-  useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const fetchedCourses = await getCourses();
-        setCourses(fetchedCourses);
-      } catch (err) {
-        console.error('Failed to fetch courses', err);
-      }
-    };
+  const [submitting, setSubmitting] = useState<string[]>([]);
 
-    fetchCourses();
-  }, []);
-
-  useEffect(() => {
-    const fetchEnrollments = async () => {
-      if (!user?.id) return;
-
-      try {
-        const enrollments = await getUserEnrollments(user.id);
-        const courseIds = enrollments?.map?.((e: Any) => e.courseId);
-        const map: EnrollmentMap = {};
-        enrollments?.forEach?.((e: Any) => {
-          map[e.courseId] = e.id;
-        });
-
-        setEnrolledCourseIds(courseIds);
-        setEnrollmentMap(map);
-      } catch (err) {
-        console.error('Failed to fetch enrollments', err);
-      }
-    };
-
-    fetchEnrollments();
-  }, [user?.id]);
+  const enrolledCourseIds = useMemo(() => enrollments?.map(e => e.courseId), [enrollments]);
+  const enrollmentMap = useMemo(() => {
+    const map: Record<string, string> = {};
+    enrollments?.forEach(e => {
+      map[e.courseId] = e.id;
+    });
+    return map;
+  }, [enrollments]);
 
   const handleEnroll = useCallback(
     async (courseId: string) => {
       if (!user?.id) return;
       setSubmitting(prev => [...prev, courseId]);
       try {
-        const { data: newEnrollment } = await enrollUser({
+        await enrollUser({
           userId: user.id,
           courseId,
           enrolledAt: new Date().toISOString(),
         });
-        setEnrolledCourseIds(prev => [...prev, courseId]);
-        setEnrollmentMap(prev => ({
-          ...prev,
-          [courseId]: newEnrollment.id,
-        }));
+
+        router.refresh();
       } catch (err) {
         console.error('Enrollment failed:', err);
       } finally {
         setSubmitting(prev => prev.filter(id => id !== courseId));
       }
     },
-    [user?.id]
+    [user?.id, router]
   );
 
   const handleUnenroll = useCallback(
     async (courseId: string) => {
-      const enrollmentId = enrollmentMap?.[courseId];
+      const enrollmentId = enrollmentMap[courseId];
       if (!enrollmentId) return;
 
       setSubmitting(prev => [...prev, courseId]);
       try {
         await unenrollUser(enrollmentId);
-        setEnrolledCourseIds(prev => prev.filter(id => id !== courseId));
-        setEnrollmentMap(prev => {
-          const updated = structuredClone({ ...prev });
-          delete updated[courseId];
-          return updated;
-        });
+
+        router.refresh();
       } catch (err) {
         console.error('Unenrollment failed:', err);
       } finally {
         setSubmitting(prev => prev.filter(id => id !== courseId));
       }
     },
-    [enrollmentMap]
+    [enrollmentMap, router]
   );
 
   const handleView = useCallback(
@@ -115,38 +80,39 @@ export const CoursesContainer = ({ title }: { title: string }) => {
 
   const courseCards = useMemo(() => {
     const filteredCourses = isMyCourses
-      ? courses?.filter(course =>
+      ? courses.filter(course =>
           user?.role === USER_ROLES.TEACHER
-            ? course?.creator?.id === user?.id
-            : enrolledCourseIds?.includes?.(course?.id)
+            ? course.creator?.id === user?.id
+            : enrolledCourseIds.includes(course.id)
         )
       : courses;
 
-    return filteredCourses?.map?.((course, index) => {
-      const isEnrolled = enrolledCourseIds?.includes?.(course.id);
+    return filteredCourses.map((course, index) => {
+      const courseId = course.id as Any;
+      const isEnrolled = enrolledCourseIds.includes(courseId);
       return (
         <CourseCard
           key={course.id}
           {...course}
           isEnrolled={isEnrolled}
-          onEnroll={() => handleEnroll(course.id)}
-          onUnenroll={() => handleUnenroll(course.id)}
-          onView={() => handleView(course.id)}
+          onEnroll={() => handleEnroll(courseId)}
+          onUnenroll={() => handleUnenroll(courseId)}
+          onView={() => handleView(courseId)}
           showEnrollButton={!!user}
           isFirstCard={index === 0}
-          isSubmitting={submitting.includes(course.id)}
+          isSubmitting={submitting.includes(courseId)}
         />
       );
     });
   }, [
     isMyCourses,
+    courses,
     enrolledCourseIds,
     handleEnroll,
     handleUnenroll,
     handleView,
     user,
     submitting,
-    courses,
   ]);
 
   return (
