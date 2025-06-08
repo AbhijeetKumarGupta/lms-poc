@@ -20,8 +20,14 @@ export default function Providers({
 }) {
   const [config, setConfig] = useLocalStorage('theme-config', { theme: THEME.LIGHT });
   const [currentTheme, setCurrentTheme] = useState(config.theme);
+  const [hasMounted, setHasMounted] = useState(false);
 
-  useEffect(() => setCurrentTheme(config.theme), [config.theme]);
+  useEffect(() => {
+    setHasMounted(true);
+    setCurrentTheme(config.theme);
+  }, [config.theme]);
+
+  if (!hasMounted) return null;
 
   const lightTheme = createTheme(themesOptions[THEME.LIGHT]);
   const darkTheme = createTheme(themesOptions[THEME.DARK]);

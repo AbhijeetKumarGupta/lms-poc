@@ -1,3 +1,5 @@
+'use client';
+
 import { Box, Divider, Skeleton, Stack, Typography } from '@mui/material';
 
 const DashboardSkeleton = () => {
