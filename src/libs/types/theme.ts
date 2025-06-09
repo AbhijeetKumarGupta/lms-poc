@@ -10,4 +10,5 @@ export interface ColorCategory {
   default?: string;
   primary?: string;
   neutral?: string;
+  primaryDark?: string;
 }

@@ -7,8 +7,8 @@ export const createComponentStyles = (
   MuiCssBaseline: {
     styleOverrides: {
       body: {
-        backgroundColor: backgroundColor?.neutral,
-        color: textColor?.primary ?? textColor?.default,
+        backgroundColor: backgroundColor.neutral,
+        color: textColor.primary ?? textColor.default,
         transition: 'background-color 0.3s ease, color 0.3s ease',
       },
     },
@@ -16,21 +16,23 @@ export const createComponentStyles = (
   MuiButton: {
     styleOverrides: {
       root: {
-        backgroundColor: backgroundColor?.primary,
-        color: textColor?.primary ?? textColor?.default,
+        borderRadius: '8px',
+        padding: '10px 20px',
+        transition: 'background-color 0.3s ease, color 0.3s ease',
         '&:hover': {
-          backgroundColor: backgroundColor?.primary,
+          backgroundColor: backgroundColor.primaryDark ?? backgroundColor.primary,
           opacity: 0.9,
         },
-        transition: 'background-color 0.3s ease, color 0.3s ease',
       },
     },
   },
   MuiCard: {
     styleOverrides: {
       root: {
-        backgroundColor: backgroundColor?.neutral,
-        color: textColor?.primary ?? textColor?.default,
+        backgroundColor: backgroundColor.neutral,
+        color: textColor.primary ?? textColor.default,
+        borderRadius: '12px',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
         transition: 'background-color 0.3s ease, color 0.3s ease',
       },
     },
@@ -38,7 +40,7 @@ export const createComponentStyles = (
   MuiTypography: {
     styleOverrides: {
       root: {
-        color: textColor?.primary ?? textColor?.default,
+        color: textColor.primary ?? textColor.default,
         transition: 'color 0.3s ease',
       },
     },

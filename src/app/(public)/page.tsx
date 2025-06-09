@@ -1,4 +1,3 @@
-import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '@/app/api/auth/[...nextauth]/authOptions';
@@ -6,9 +5,12 @@ import { CoursesContainer } from '@/components/organism/courses-container';
 import { getCourses } from '@/libs/services/course';
 import { getUserEnrollments } from '@/libs/services/enrollments';
 
-async function getHomeDataByUserId(userId: string): Promise<Any> {
+async function getHomeDataByUserId(userId?: string): Promise<Any> {
   try {
-    const [courses, enrollments] = await Promise.all([getCourses(), getUserEnrollments(userId)]);
+    const [courses, enrollments] = await Promise.all([
+      getCourses(),
+      userId ? getUserEnrollments(userId) : [],
+    ]);
 
     return {
       courses,
@@ -23,10 +25,6 @@ async function getHomeDataByUserId(userId: string): Promise<Any> {
 export default async function Home() {
   const session = await getServerSession(authOptions);
   const userId = session?.user?.id;
-
-  if (!userId) {
-    redirect('/auth/sign-in');
-  }
 
   const { courses, enrollments } = await getHomeDataByUserId(userId);
 

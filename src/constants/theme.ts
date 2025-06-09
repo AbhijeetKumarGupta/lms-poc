@@ -1,22 +1,34 @@
 export enum THEME {
-  'LIGHT' = 'light',
-  'DARK' = 'dark',
+  LIGHT = 'light',
+  DARK = 'dark',
 }
 
-const lightThemeColors = {
-  __color_primary: '#f4f5f7',
-  __color_neutral: '#FFFFFF',
-  __color_text_primary: '#121212',
-  __color_text_neutral: '#FFFFFF',
-};
-
-const darkThemeColors = {
-  __dark_color_primary: '#1E1E1E',
-  __dark_color_neutral: '#1E1E1E',
-  __dark_color_text: '#FFFFFF',
-};
-
 export const colors = {
-  ...lightThemeColors,
-  ...darkThemeColors,
+  primary: '#1E3A8A',
+  primaryContrastText: '#FFFFFF',
+  primaryDark: '#15357A',
+
+  secondary: '#059669',
+  secondaryContrastText: '#FFFFFF',
+  secondaryDark: '#047857',
+
+  success: '#16A34A',
+  successContrastText: '#FFFFFF',
+  successDark: '#0F823F',
+
+  error: '#DC2626',
+  errorContrastText: '#FFFFFF',
+  errorDark: '#B91C1C',
+
+  backgroundLight: '#F9FAFB',
+  paperLight: '#FFFFFF',
+
+  backgroundDark: '#121212',
+  paperDark: '#1F2937',
+
+  textPrimaryLight: '#111827',
+  textSecondaryLight: '#6B7280',
+
+  textPrimaryDark: '#F3F4F6',
+  textSecondaryDark: '#9CA3AF',
 };

@@ -129,7 +129,7 @@ const CourseCard = memo(function CourseCard({
           <Button
             disabled={isSubmitting}
             variant="contained"
-            color="success"
+            color="info"
             onClick={handleViewClick}
           >
             View
@@ -149,7 +149,7 @@ const CourseCard = memo(function CourseCard({
                 <Button
                   loading={isSubmitting}
                   variant="contained"
-                  color="primary"
+                  color="success"
                   onClick={handleEnrollClick}
                 >
                   Enroll

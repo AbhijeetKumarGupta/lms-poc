@@ -1,56 +1,80 @@
-import { ThemeOptions } from '@mui/material';
-
 import { colors, THEME } from '@/constants/theme';
 import { createComponentStyles } from '@/libs/utils/createComponentStyles';
-
-const {
-  __color_primary,
-  __color_neutral,
-  __color_text_primary,
-  __color_text_neutral,
-  __dark_color_primary,
-  __dark_color_neutral,
-  __dark_color_text,
-} = colors;
+import { ThemeOptions } from '@mui/material';
 
 export const themesOptions: Record<string, ThemeOptions> = {
   [THEME.LIGHT]: {
     palette: {
       mode: THEME.LIGHT,
+      primary: {
+        main: colors.primary,
+        contrastText: colors.primaryContrastText,
+        dark: colors.primaryDark,
+      },
+      secondary: {
+        main: colors.secondary,
+        contrastText: colors.secondaryContrastText,
+        dark: colors.secondaryDark,
+      },
+      success: {
+        main: colors.success,
+        contrastText: colors.successContrastText,
+        dark: colors.successDark,
+      },
+      error: {
+        main: colors.error,
+        contrastText: colors.errorContrastText,
+        dark: colors.errorDark,
+      },
       background: {
-        default: __color_neutral,
-        paper: __color_neutral,
+        default: colors.backgroundLight,
+        paper: colors.paperLight,
       },
       text: {
-        primary: __color_text_primary,
-        secondary: __color_text_neutral,
+        primary: colors.textPrimaryLight,
+        secondary: colors.textSecondaryLight,
       },
     },
     components: createComponentStyles(
-      {
-        primary: __color_primary,
-        neutral: __color_neutral,
-      },
-      { default: __color_text_primary }
+      { primary: colors.primary, neutral: colors.paperLight, primaryDark: colors.primaryDark },
+      { primary: colors.textPrimaryLight, default: colors.textSecondaryLight }
     ),
   },
   [THEME.DARK]: {
     palette: {
       mode: THEME.DARK,
+      primary: {
+        main: colors.primaryDark,
+        contrastText: colors.primaryContrastText,
+        dark: colors.primary,
+      },
+      secondary: {
+        main: colors.secondaryDark,
+        contrastText: colors.secondaryContrastText,
+        dark: colors.secondary,
+      },
+      success: {
+        main: colors.successDark,
+        contrastText: '#000000',
+        dark: colors.success,
+      },
+      error: {
+        main: colors.errorDark,
+        contrastText: '#000000',
+        dark: colors.error,
+      },
       background: {
-        default: __dark_color_primary,
-        paper: __dark_color_primary,
+        default: colors.backgroundDark,
+        paper: colors.paperDark,
       },
       text: {
-        primary: __dark_color_text,
+        primary: colors.textPrimaryDark,
+        secondary: colors.textSecondaryDark,
       },
     },
     components: createComponentStyles(
-      {
-        primary: __dark_color_primary,
-        neutral: __dark_color_neutral,
-      },
-      { default: __dark_color_text }
+      { primary: colors.primaryDark, neutral: colors.paperDark, primaryDark: colors.primary },
+      { primary: colors.textPrimaryDark, default: colors.textSecondaryDark }
     ),
   },
 };

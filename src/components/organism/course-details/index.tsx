@@ -102,7 +102,8 @@ const CourseDetails = ({ courseData }: CourseDetailsProps) => {
       <Box display="flex" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
         <Box display="flex" alignItems="baseline" gap={0}>
           <Button
-            sx={{ color: 'red', fontSize: 30, backgroundColor: 'transparent' }}
+            color="error"
+            sx={{ fontSize: 30, backgroundColor: 'transparent', marginRight: 2 }}
             variant="text"
             onClick={() => router.back()}
           >
@@ -133,7 +134,7 @@ const CourseDetails = ({ courseData }: CourseDetailsProps) => {
           <Typography variant="subtitle1" sx={{ mb: 1 }}>
             Progress: {progressPercentage}%
           </Typography>
-          <LinearProgress variant="determinate" value={progressPercentage} />
+          <LinearProgress color="success" variant="determinate" value={progressPercentage} />
         </Box>
       )}
 
@@ -185,6 +186,7 @@ const CourseDetails = ({ courseData }: CourseDetailsProps) => {
                 onClick={() => markSectionComplete(sectionId)}
                 sx={{ mt: 2 }}
                 disabled={markCompleteLoading.includes(sectionId)}
+                color="success"
               >
                 Mark as Complete
               </Button>

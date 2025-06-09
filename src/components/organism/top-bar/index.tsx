@@ -17,7 +17,12 @@ import { THEME } from '@/constants/theme';
 import CustomSwitch from '@/components/atom/custom-switch';
 import { getShortName } from '@/libs/utils';
 
-import { StyledSignInLogoutButton, StyledSignUpButton, switchControllerStyles } from './styles';
+import {
+  StyledSignInLogoutButton,
+  StyledSignUpButton,
+  switchStyles,
+  switchControllerStyles,
+} from './styles';
 
 interface TopBarProps {
   onMenuClick?: () => void;
@@ -33,7 +38,14 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
   const userNameShort = useMemo(() => getShortName(user?.name), [user]);
 
   return (
-    <AppBar position="fixed" sx={{ zIndex: theme => theme.zIndex.drawer + 1 }}>
+    <AppBar
+      position="fixed"
+      sx={theme => ({
+        zIndex: theme.zIndex.drawer + 1,
+        backgroundColor: theme.palette.background.paper,
+        color: theme.palette.text.primary,
+      })}
+    >
       <Toolbar>
         {!!role && (
           <IconButton onClick={onMenuClick} color="inherit" edge="start" sx={{ mr: 2 }}>
@@ -47,6 +59,7 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
           switchProps={{
             checked: theme === THEME.DARK,
             onChange: () => changeTheme(theme === THEME.DARK ? THEME.LIGHT : THEME.DARK),
+            sx: switchStyles,
           }}
           controllerProps={{
             label: theme === THEME.DARK ? <DarkModeIcon /> : <LightModeIcon />,
