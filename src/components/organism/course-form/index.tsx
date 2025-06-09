@@ -71,7 +71,8 @@ export default function CourseForm({ initialValues }: CourseFormProps) {
       <Box display="flex" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
         <Box display="flex" alignItems="baseline" justifyContent="center" gap={0}>
           <Button
-            sx={{ color: 'red', fontSize: 30, backgroundColor: 'transparent' }}
+            color="error"
+            sx={{ fontSize: 30, backgroundColor: 'transparent', marginRight: 2 }}
             variant="text"
             onClick={() => router.back()}
           >

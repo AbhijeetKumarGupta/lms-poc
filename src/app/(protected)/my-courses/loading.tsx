@@ -2,10 +2,10 @@
 
 import { Box, Divider, Skeleton, Stack, Typography } from '@mui/material';
 
-const DashboardSkeleton = () => {
+const MyCoursesSkeleton = () => {
   return (
     <Stack gap={2}>
-      <Typography variant="h5">
+      <Typography mb={2} mt={2} variant="h4">
         <Skeleton animation="wave" width={200} height={50} />
       </Typography>
 
@@ -20,4 +20,4 @@ const DashboardSkeleton = () => {
   );
 };
 
-export default DashboardSkeleton;
+export default MyCoursesSkeleton;

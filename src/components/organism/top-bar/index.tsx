@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import { Avatar, Box, Tooltip } from '@mui/material';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
+import BoyIcon from '@mui/icons-material/Boy';
 
 import { useTheme } from '@/hooks/useTheme';
 import { THEME } from '@/constants/theme';
@@ -47,46 +48,60 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
       })}
     >
       <Toolbar>
-        {!!role && (
-          <IconButton onClick={onMenuClick} color="inherit" edge="start" sx={{ mr: 2 }}>
-            <MenuIcon />
-          </IconButton>
-        )}
-        <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 700 }}>
-          Learn Before You Earn
-        </Typography>
-        <CustomSwitch
-          switchProps={{
-            checked: theme === THEME.DARK,
-            onChange: () => changeTheme(theme === THEME.DARK ? THEME.LIGHT : THEME.DARK),
-            sx: switchStyles,
-          }}
-          controllerProps={{
-            label: theme === THEME.DARK ? <DarkModeIcon /> : <LightModeIcon />,
-            sx: switchControllerStyles,
-          }}
-        />
-        {!session ? (
-          <Box display="flex" gap={2}>
-            <StyledSignInLogoutButton
-              onClick={() => signIn(undefined, { callbackUrl: '/dashboard' })}
+        <Box display="flex" justifyContent="space-between" width="100%">
+          <Box display="flex" gap={1} alignItems="center">
+            {!!role && (
+              <IconButton onClick={onMenuClick} color="inherit" edge="start">
+                <MenuIcon />
+              </IconButton>
+            )}
+            <Box
+              display="flex"
+              alignItems="flex-end"
+              sx={{ cursor: 'pointer' }}
+              onClick={() => router.push('/')}
             >
-              Sign In
-            </StyledSignInLogoutButton>
-            <StyledSignUpButton onClick={() => router.push('/auth/sign-up')}>
-              Sign Up
-            </StyledSignUpButton>
+              <BoyIcon fontSize="large" color={theme === THEME.DARK ? 'error' : 'success'} />
+              <Typography variant="h5" sx={{ fontWeight: 700 }}>
+                GoodMe
+              </Typography>
+            </Box>
           </Box>
-        ) : (
           <Box display="flex" gap={2} alignItems="center">
-            <StyledSignInLogoutButton onClick={() => signOut({ callbackUrl: '/auth/sign-in' })}>
-              Logout
-            </StyledSignInLogoutButton>
-            <Tooltip title={user?.name}>
-              <Avatar src={user?.image ?? undefined}>{userNameShort ?? 'U'}</Avatar>
-            </Tooltip>
+            <CustomSwitch
+              switchProps={{
+                checked: theme === THEME.DARK,
+                onChange: () => changeTheme(theme === THEME.DARK ? THEME.LIGHT : THEME.DARK),
+                sx: switchStyles,
+              }}
+              controllerProps={{
+                label: theme === THEME.DARK ? <DarkModeIcon /> : <LightModeIcon />,
+                sx: switchControllerStyles,
+              }}
+            />
+            {!session ? (
+              <>
+                <StyledSignInLogoutButton
+                  onClick={() => signIn(undefined, { callbackUrl: '/dashboard' })}
+                >
+                  Sign In
+                </StyledSignInLogoutButton>
+                <StyledSignUpButton onClick={() => router.push('/auth/sign-up')}>
+                  Sign Up
+                </StyledSignUpButton>
+              </>
+            ) : (
+              <>
+                <StyledSignInLogoutButton onClick={() => signOut({ callbackUrl: '/auth/sign-in' })}>
+                  Logout
+                </StyledSignInLogoutButton>
+                <Tooltip title={user?.name}>
+                  <Avatar src={user?.image ?? undefined}>{userNameShort ?? 'U'}</Avatar>
+                </Tooltip>
+              </>
+            )}
           </Box>
-        )}
+        </Box>
       </Toolbar>
     </AppBar>
   );

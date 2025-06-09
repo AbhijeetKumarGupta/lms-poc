@@ -117,7 +117,9 @@ export const CoursesContainer = ({ title, user, courses, enrollments }: CoursesC
 
   return (
     <Stack gap={2}>
-      <Typography variant="h5">{title}</Typography>
+      <Typography mb={2} mt={2} variant="h4">
+        {title}
+      </Typography>
       <Divider />
       <Box display="flex" justifyContent="center" flexWrap="wrap" gap={2}>
         {courseCards}
