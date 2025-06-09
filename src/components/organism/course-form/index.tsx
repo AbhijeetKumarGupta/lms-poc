@@ -154,6 +154,7 @@ export default function CourseForm({ initialValues }: CourseFormProps) {
 
         <Button
           variant="outlined"
+          color="warning"
           onClick={() => append({ title: '', description: '', videoUrl: '' })}
         >
           Add Section

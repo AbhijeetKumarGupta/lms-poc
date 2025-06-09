@@ -1,7 +1,7 @@
 'use client';
 
 import ShareIcon from '@mui/icons-material/Share';
-import { Box } from '@mui/material';
+import { Box, Tooltip } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -104,7 +104,21 @@ const CourseCard = memo(function CourseCard({
             {creatorNameShort}
           </Avatar>
         }
-        title={title}
+        title={
+          <Tooltip title={title}>
+            <Typography
+              noWrap
+              sx={{
+                textOverflow: 'ellipsis',
+                overflow: 'hidden',
+                width: title?.length > 30 ? '64%' : '100%',
+                display: 'block',
+              }}
+            >
+              {title}
+            </Typography>
+          </Tooltip>
+        }
         subheader={`${creator?.name} • ${creationDate}`}
       />
       <Box sx={{ position: 'relative', height: 194 }}>
