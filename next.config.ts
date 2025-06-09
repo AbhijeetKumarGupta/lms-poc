@@ -17,6 +17,11 @@ const nextConfig: NextConfig = {
         hostname: 'randomuser.me',
         pathname: '/api/portraits/**',
       },
+      //TODO: Remove after integarting ImageKit
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
     ],
   },
 
