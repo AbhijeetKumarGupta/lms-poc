@@ -121,7 +121,7 @@ export const CoursesContainer = ({ title, user, courses, enrollments }: CoursesC
       <Typography mb={2} mt={2} variant="h4">
         {title}
       </Typography>
-
+      <Divider />
       <Box
         display="flex"
         justifyContent="center"
@@ -130,7 +130,6 @@ export const CoursesContainer = ({ title, user, courses, enrollments }: CoursesC
         gap={2}
         height="65vh"
       >
-        <Divider />
         {courseCards?.length ? (
           courseCards
         ) : (
