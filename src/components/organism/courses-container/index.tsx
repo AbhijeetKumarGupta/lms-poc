@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { Box, Divider, Stack, Typography } from '@mui/material';
 import { useCallback, useMemo, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
@@ -121,8 +122,25 @@ export const CoursesContainer = ({ title, user, courses, enrollments }: CoursesC
         {title}
       </Typography>
       <Divider />
-      <Box display="flex" justifyContent="center" flexWrap="wrap" gap={2}>
-        {courseCards}
+
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems={!courseCards?.length ? 'center' : 'flex-start'}
+        flexWrap="wrap"
+        gap={2}
+        height="65vh"
+      >
+        {courseCards?.length ? (
+          courseCards
+        ) : (
+          <Image
+            src="https://eastcampus.shcollege.ac.in/wp-content/themes/eastcampas-2024/assets/no-results.png"
+            width={400}
+            height={400}
+            alt="No data found!"
+          />
+        )}
       </Box>
     </Stack>
   );

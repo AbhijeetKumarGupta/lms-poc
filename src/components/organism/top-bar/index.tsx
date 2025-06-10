@@ -17,6 +17,7 @@ import { useTheme } from '@/hooks/useTheme';
 import { THEME } from '@/constants/theme';
 import CustomSwitch from '@/components/atom/custom-switch';
 import { getShortName } from '@/libs/utils';
+import KebabMenu from '@/components/molecule/kebab-menu';
 
 import {
   StyledSignInLogoutButton,
@@ -67,7 +68,7 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
               </Typography>
             </Box>
           </Box>
-          <Box display="flex" gap={2} alignItems="center">
+          <Box display="flex" gap={{ xs: 0, sm: 2 }} alignItems="center">
             <CustomSwitch
               switchProps={{
                 checked: theme === THEME.DARK,
@@ -79,27 +80,64 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
                 sx: switchControllerStyles,
               }}
             />
-            {!session ? (
-              <>
-                <StyledSignInLogoutButton
-                  onClick={() => signIn(undefined, { callbackUrl: '/dashboard' })}
-                >
-                  Sign In
-                </StyledSignInLogoutButton>
-                <StyledSignUpButton onClick={() => router.push('/auth/sign-up')}>
-                  Sign Up
-                </StyledSignUpButton>
-              </>
-            ) : (
-              <>
-                <StyledSignInLogoutButton onClick={() => signOut({ callbackUrl: '/auth/sign-in' })}>
-                  Logout
-                </StyledSignInLogoutButton>
-                <Tooltip title={user?.name}>
-                  <Avatar src={user?.image ?? undefined}>{userNameShort ?? 'U'}</Avatar>
-                </Tooltip>
-              </>
-            )}
+            <Box sx={{ display: { xs: 'none', sm: 'flex' } }} gap={2}>
+              {!session ? (
+                <>
+                  <StyledSignInLogoutButton
+                    onClick={() => signIn(undefined, { callbackUrl: '/dashboard' })}
+                  >
+                    Sign In
+                  </StyledSignInLogoutButton>
+                  <StyledSignUpButton onClick={() => router.push('/auth/sign-up')}>
+                    Sign Up
+                  </StyledSignUpButton>
+                </>
+              ) : (
+                <>
+                  <StyledSignInLogoutButton
+                    onClick={() => signOut({ callbackUrl: '/auth/sign-in' })}
+                  >
+                    Logout
+                  </StyledSignInLogoutButton>
+                  <Tooltip title={user?.name}>
+                    <Avatar src={user?.image ?? undefined}>{userNameShort ?? 'U'}</Avatar>
+                  </Tooltip>
+                </>
+              )}
+            </Box>
+            <KebabMenu
+              sx={{ display: { xs: 'block', sm: 'none' } }}
+              options={
+                !session
+                  ? [
+                      {
+                        label: 'Sign In',
+                        action: () => signIn(undefined, { callbackUrl: '/dashboard' }),
+                      },
+                      {
+                        label: 'Sign Up',
+                        action: () => router.push('/auth/sign-up'),
+                      },
+                    ]
+                  : [
+                      {
+                        label: (
+                          <Box display="flex" alignItems="center" gap={2}>
+                            <Avatar sx={{ width: 32, height: 32 }} src={user?.image ?? undefined}>
+                              {userNameShort ?? 'U'}
+                            </Avatar>
+                            {user?.name?.split?.(' ')?.[0]}
+                          </Box>
+                        ),
+                        action: () => {},
+                      },
+                      {
+                        label: 'Logout',
+                        action: () => signOut({ callbackUrl: '/auth/sign-in' }),
+                      },
+                    ]
+              }
+            />
           </Box>
         </Box>
       </Toolbar>

@@ -1,7 +1,8 @@
 'use client';
 
+import Image from 'next/image';
 import { useSession } from 'next-auth/react';
-import { Box, Typography, Divider, Paper, useTheme, LinearProgress, Button } from '@mui/material';
+import { Box, Typography, Divider, Paper, LinearProgress, Button } from '@mui/material';
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -17,7 +18,6 @@ interface CourseDetailsProps {
 }
 
 const CourseDetails = ({ courseData }: CourseDetailsProps) => {
-  const theme = useTheme();
   const router = useRouter();
   const { data: session } = useSession();
 
@@ -99,7 +99,13 @@ const CourseDetails = ({ courseData }: CourseDetailsProps) => {
 
   return (
     <Box sx={{ maxWidth: 900, mx: 'auto', p: { xs: 2, md: 4 } }}>
-      <Box display="flex" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
+      <Box
+        display="flex"
+        flexDirection={{ xs: 'column', sm: 'row' }}
+        alignItems="center"
+        justifyContent="space-between"
+        sx={{ mb: 2 }}
+      >
         <Box display="flex" alignItems="baseline" gap={0}>
           <Button
             color="error"
@@ -109,12 +115,25 @@ const CourseDetails = ({ courseData }: CourseDetailsProps) => {
           >
             ←
           </Button>
-          <Typography variant="h3" gutterBottom sx={{ fontWeight: 600 }}>
+          <Typography
+            variant="h3"
+            gutterBottom
+            sx={{
+              fontWeight: { xs: 400, sm: 600 },
+              fontSize: { xs: '1.8rem', sm: '2.2rem', md: '2.5rem' },
+            }}
+          >
             {courseData.title}
           </Typography>
         </Box>
         {isCreator && (
-          <Box display="flex" gap={2}>
+          <Box
+            display="flex"
+            justifyContent={{ xs: 'flex-end', sm: 'center' }}
+            width="100%"
+            gap={2}
+            mt={{ xs: 2, sm: 1 }}
+          >
             <StyledEditButton onClick={handleEditClick} variant="contained" size="small">
               Edit
             </StyledEditButton>
@@ -124,21 +143,53 @@ const CourseDetails = ({ courseData }: CourseDetailsProps) => {
           </Box>
         )}
       </Box>
+      <Divider sx={{ my: 2 }} />
+      <Box>
+        <Box
+          sx={{
+            width: '100%',
+            height: 400,
+            overflow: 'hidden',
+            mb: 2,
+            position: 'relative',
+          }}
+        >
+          <Image
+            src={courseData?.image}
+            alt={courseData?.title}
+            fill
+            style={{
+              objectFit: 'cover',
+              objectPosition: 'center',
+            }}
+          />
+        </Box>
 
-      <Typography variant="body1" sx={{ mb: 4 }}>
-        {courseData.description}
-      </Typography>
+        <Typography
+          variant="body1"
+          sx={{
+            textAlign: 'justify',
+            mb: 4,
+          }}
+        >
+          {courseData.description}
+        </Typography>
+      </Box>
+
+      <Box width="100%" my={3} py={2} borderBottom="2px solid">
+        <Typography variant="h4" textAlign="center">
+          Sections
+        </Typography>
+      </Box>
 
       {enrolled && (
-        <Box sx={{ mb: 4 }}>
+        <Box sx={{ mb: 4, p: 2, backgroundColor: 'rgba(255, 0, 0, 0.06)', borderRadius: 3 }}>
           <Typography variant="subtitle1" sx={{ mb: 1 }}>
             Progress: {progressPercentage}%
           </Typography>
           <LinearProgress color="success" variant="determinate" value={progressPercentage} />
         </Box>
       )}
-
-      <Divider sx={{ my: 3 }} />
 
       {courseData.sections.map((section: Section, index: number) => {
         const sectionId = section.id as number;
@@ -152,7 +203,6 @@ const CourseDetails = ({ courseData }: CourseDetailsProps) => {
               mb: 5,
               p: 3,
               borderRadius: 3,
-              backgroundColor: theme.palette.mode === 'dark' ? '#1e1e1e' : '#fafafa',
             }}
           >
             <Typography variant="h5" gutterBottom>

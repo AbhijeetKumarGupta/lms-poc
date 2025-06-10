@@ -132,8 +132,18 @@ const CourseCard = memo(function CourseCard({
           quality={75}
         />
       </Box>
-      <CardContent sx={{ minHeight: 80, maxHeight: 80, overflow: 'hidden' }}>
-        <Typography variant="body2">{description}</Typography>
+      <CardContent sx={{ minHeight: 90, maxHeight: 90, overflow: 'hidden' }}>
+        <Typography
+          sx={{
+            display: '-webkit-box',
+            overflow: 'hidden',
+            WebkitBoxOrient: 'vertical',
+            WebkitLineClamp: 3,
+            textOverflow: 'ellipsis',
+          }}
+        >
+          {description}
+        </Typography>
       </CardContent>
       <CardActions
         sx={{ display: 'flex', justifyContent: 'space-between', width: '100%', px: 2, pb: 2 }}
