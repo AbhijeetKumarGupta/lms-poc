@@ -26,7 +26,7 @@ export default async function Home() {
   const session = await getServerSession(authOptions);
   const userId = session?.user?.id;
 
-  const { courses, enrollments } = await getHomeDataByUserId(userId);
+  const { courses = [], enrollments } = await getHomeDataByUserId(userId);
 
   return (
     <CoursesContainer

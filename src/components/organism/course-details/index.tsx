@@ -129,10 +129,11 @@ const CourseDetails = ({ courseData }: CourseDetailsProps) => {
         {isCreator && (
           <Box
             display="flex"
-            justifyContent={{ xs: 'flex-end', sm: 'center' }}
-            width="100%"
+            justifyContent="flex-end"
+            width="30%"
             gap={2}
             mt={{ xs: 2, sm: 1 }}
+            mr={2}
           >
             <StyledEditButton onClick={handleEditClick} variant="contained" size="small">
               Edit

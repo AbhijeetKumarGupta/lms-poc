@@ -1,15 +1,19 @@
 'use client';
 
+import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Button, Stack, TextField, Typography, Divider } from '@mui/material';
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import DeleteIcon from '@mui/icons-material/Delete';
+import FileUpload from '@/components/molecule/file-upload';
 
 import { manageCourseSchema } from '@/libs/validations/manage-course';
 import { Course } from '@/libs/types/course';
 import { createCourse, updateCourse } from '@/libs/services/course';
+import CustomSwitch from '@/components/atom/custom-switch';
+import { FILE_TYPES } from '@/constants';
 
 interface CourseFormProps {
   initialValues?: Course;
@@ -17,6 +21,8 @@ interface CourseFormProps {
 
 export default function CourseForm({ initialValues }: CourseFormProps) {
   const { data: session } = useSession();
+  const [useImageUrl, setUseImageUrl] = useState(false);
+  const [useVideoUrl, setUseVideoUrl] = useState<{ [key: number]: boolean }>({});
   const router = useRouter();
   const user = session?.user;
 
@@ -24,7 +30,9 @@ export default function CourseForm({ initialValues }: CourseFormProps) {
     register,
     handleSubmit,
     control,
+    setValue,
     formState: { errors, isSubmitting },
+    watch,
   } = useForm<Course>({
     resolver: yupResolver(manageCourseSchema),
     defaultValues: initialValues || {
@@ -40,6 +48,11 @@ export default function CourseForm({ initialValues }: CourseFormProps) {
     control,
     name: 'sections',
   });
+
+  const handleUploadProgress = (progress: number) => {
+    //// TODO: Add progress loaded
+    console.log(progress);
+  };
 
   const onSubmit: SubmitHandler<Course> = async values => {
     try {
@@ -94,12 +107,60 @@ export default function CourseForm({ initialValues }: CourseFormProps) {
           helperText={errors.title?.message}
         />
 
-        <TextField
-          label="Image URL"
-          {...register('image')}
-          error={!!errors.image}
-          helperText={errors.image?.message}
+        <Typography variant="subtitle1">Course Image</Typography>
+        <CustomSwitch
+          switchProps={{
+            checked: useImageUrl,
+            onChange: () => setUseImageUrl(prev => !prev),
+          }}
+          controllerProps={{
+            label: 'Use Image URL Instead of Upload',
+          }}
         />
+        <input type="hidden" {...register('image')} />
+        {useImageUrl ? (
+          <TextField
+            label="Image URL"
+            {...register('image')}
+            error={!!errors.image}
+            helperText={errors.image?.message}
+          />
+        ) : watch('image') ? (
+          <Box display="flex" flexDirection="column" gap={1}>
+            <Box
+              component="img"
+              src={watch('image')}
+              alt="Course Preview"
+              sx={{ maxWidth: 200, borderRadius: 2 }}
+            />
+            <Button variant="outlined" color="error" onClick={() => setValue('image', '')}>
+              Remove Image
+            </Button>
+          </Box>
+        ) : (
+          <>
+            <FileUpload
+              fileType={FILE_TYPES.IMAGE}
+              onSuccess={res =>
+                setValue('image', `${process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT}${res.filePath}`)
+              }
+              onProgress={handleUploadProgress}
+              formError={errors?.image}
+            />
+            {errors?.image && (
+              <Typography
+                variant="caption"
+                sx={{
+                  ml: '14px !important',
+                  mt: '3px !important',
+                  color: theme => theme.palette.error.main,
+                }}
+              >
+                {errors.image.message}
+              </Typography>
+            )}
+          </>
+        )}
 
         <TextField
           label="Description"
@@ -114,7 +175,7 @@ export default function CourseForm({ initialValues }: CourseFormProps) {
 
         <Typography variant="h6">Sections</Typography>
 
-        {fields.map((field, index) => (
+        {fields?.map?.((field, index) => (
           <Box key={field.id} sx={{ border: '1px solid #ccc', p: 2, borderRadius: 2 }}>
             <Stack spacing={2}>
               <TextField
@@ -133,21 +194,82 @@ export default function CourseForm({ initialValues }: CourseFormProps) {
                 helperText={errors.sections?.[index]?.description?.message}
               />
 
-              <TextField
-                label="Video URL"
-                {...register(`sections.${index}.videoUrl`)}
-                error={!!errors.sections?.[index]?.videoUrl}
-                helperText={errors.sections?.[index]?.videoUrl?.message}
+              <Typography variant="subtitle1">Section Video</Typography>
+              <CustomSwitch
+                key={field.id}
+                switchProps={{
+                  checked: useVideoUrl?.[index] || false,
+                  onChange: () =>
+                    setUseVideoUrl(prev => ({
+                      ...prev,
+                      [index]: !prev[index],
+                    })),
+                }}
+                controllerProps={{
+                  label: 'Use Video URL Instead of Upload',
+                }}
               />
+              <input type="hidden" {...register(`sections.${index}.videoUrl`)} />
+              {useVideoUrl?.[index] ? (
+                <TextField
+                  label="Video URL"
+                  {...register(`sections.${index}.videoUrl`)}
+                  error={!!errors?.sections?.[index]?.videoUrl}
+                  helperText={errors?.sections?.[index]?.videoUrl?.message}
+                />
+              ) : watch(`sections.${index}.videoUrl`) ? (
+                <Box display="flex" flexDirection="column" gap={1}>
+                  <video
+                    controls
+                    src={watch(`sections.${index}.videoUrl`)}
+                    style={{ maxWidth: '100%', borderRadius: 4 }}
+                  />
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    onClick={() => setValue(`sections.${index}.videoUrl`, '')}
+                  >
+                    Remove Video
+                  </Button>
+                </Box>
+              ) : (
+                <>
+                  <FileUpload
+                    fileType={FILE_TYPES.VIDEO}
+                    onSuccess={res =>
+                      setValue(
+                        `sections.${index}.videoUrl`,
+                        `${process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT}${res.filePath}`
+                      )
+                    }
+                    onProgress={handleUploadProgress}
+                    formError={errors.sections?.[index]?.videoUrl}
+                  />
+                  {errors.sections?.[index]?.videoUrl && (
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        ml: '14px !important',
+                        mt: '3px !important',
+                        color: theme => theme.palette.error.main,
+                      }}
+                    >
+                      {errors.sections[index].videoUrl?.message}
+                    </Typography>
+                  )}
+                </>
+              )}
 
-              <Button
-                variant="outlined"
-                color="error"
-                startIcon={<DeleteIcon />}
-                onClick={() => remove(index)}
-              >
-                Remove Section
-              </Button>
+              {fields?.length > 1 && (
+                <Button
+                  variant="outlined"
+                  color="error"
+                  startIcon={<DeleteIcon />}
+                  onClick={() => remove(index)}
+                >
+                  Remove Section
+                </Button>
+              )}
             </Stack>
           </Box>
         ))}

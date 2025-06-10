@@ -80,7 +80,7 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
                 sx: switchControllerStyles,
               }}
             />
-            <Box sx={{ display: { xs: 'none', sm: 'flex' } }} gap={2}>
+            <Box display={{ xs: 'none', sm: 'flex' }} alignItems="center" gap={2}>
               {!session ? (
                 <>
                   <StyledSignInLogoutButton

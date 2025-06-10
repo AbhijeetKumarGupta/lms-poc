@@ -5,11 +5,15 @@ import { ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import { useEffect, useState } from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
+import { ImageKitProvider } from 'imagekitio-next';
 
 import { ThemeContext } from '@/context/ThemeContext';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { THEME } from '@/constants/theme';
 import { themesOptions } from '@/theme';
+
+const urlEndpoint = process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT!;
+const publicKey = process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY!;
 
 export default function Providers({
   children,
@@ -29,6 +33,17 @@ export default function Providers({
 
   if (!hasMounted) return null;
 
+  const authenticator = async () => {
+    try {
+      const res = await fetch('/api/auth/upload');
+      if (!res.ok) throw new Error('Failed to authenticate');
+      return res.json();
+    } catch (error) {
+      console.error('ImageKit authentication error:', error);
+      throw error;
+    }
+  };
+
   const lightTheme = createTheme(themesOptions[THEME.LIGHT]);
   const darkTheme = createTheme(themesOptions[THEME.DARK]);
 
@@ -39,7 +54,13 @@ export default function Providers({
       >
         <ThemeProvider theme={currentTheme === THEME.DARK ? darkTheme : lightTheme}>
           <CssBaseline />
-          {children}
+          <ImageKitProvider
+            authenticator={authenticator}
+            publicKey={publicKey}
+            urlEndpoint={urlEndpoint}
+          >
+            {children}
+          </ImageKitProvider>
         </ThemeProvider>
       </ThemeContext.Provider>
     </SessionProvider>
