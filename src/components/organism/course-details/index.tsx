@@ -217,7 +217,7 @@ const CourseDetails = ({ courseData }: CourseDetailsProps) => {
               <iframe
                 src={section.videoUrl}
                 frameBorder="0"
-                allow="autoplay; encrypted-media"
+                allow="encrypted-media"
                 allowFullScreen
                 style={{
                   position: 'absolute',

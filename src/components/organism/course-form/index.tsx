@@ -7,13 +7,14 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Button, Stack, TextField, Typography, Divider } from '@mui/material';
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import DeleteIcon from '@mui/icons-material/Delete';
-import FileUpload from '@/components/molecule/file-upload';
 
+import FileUpload from '@/components/molecule/file-upload';
 import { manageCourseSchema } from '@/libs/validations/manage-course';
 import { Course } from '@/libs/types/course';
 import { createCourse, updateCourse } from '@/libs/services/course';
 import CustomSwitch from '@/components/atom/custom-switch';
 import { FILE_TYPES } from '@/constants';
+import VideoPlayer from '@/components/molecule/video-player';
 
 interface CourseFormProps {
   initialValues?: Course;
@@ -131,7 +132,7 @@ export default function CourseForm({ initialValues }: CourseFormProps) {
               component="img"
               src={watch('image')}
               alt="Course Preview"
-              sx={{ maxWidth: 200, borderRadius: 2 }}
+              sx={{ width: '100%', borderRadius: 2 }}
             />
             <Button variant="outlined" color="error" onClick={() => setValue('image', '')}>
               Remove Image
@@ -219,11 +220,7 @@ export default function CourseForm({ initialValues }: CourseFormProps) {
                 />
               ) : watch(`sections.${index}.videoUrl`) ? (
                 <Box display="flex" flexDirection="column" gap={1}>
-                  <video
-                    controls
-                    src={watch(`sections.${index}.videoUrl`)}
-                    style={{ maxWidth: '100%', borderRadius: 4 }}
-                  />
+                  <VideoPlayer url={watch(`sections.${index}.videoUrl`)} />
                   <Button
                     variant="outlined"
                     color="error"

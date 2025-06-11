@@ -23,10 +23,10 @@ export const CoursesContainer = ({ title, user, courses, enrollments }: CoursesC
 
   const [submitting, setSubmitting] = useState<string[]>([]);
 
-  const enrolledCourseIds = useMemo(() => enrollments?.map(e => e.courseId), [enrollments]);
+  const enrolledCourseIds = useMemo(() => enrollments?.map?.(e => e.courseId), [enrollments]);
   const enrollmentMap = useMemo(() => {
     const map: Record<string, string> = {};
-    enrollments?.forEach(e => {
+    enrollments?.forEach?.(e => {
       map[e.courseId] = e.id;
     });
     return map;
@@ -81,14 +81,14 @@ export const CoursesContainer = ({ title, user, courses, enrollments }: CoursesC
 
   const courseCards = useMemo(() => {
     const filteredCourses = isMyCourses
-      ? courses.filter(course =>
+      ? courses?.filter?.(course =>
           user?.role === USER_ROLES.TEACHER
             ? course.creator?.id === user?.id
             : enrolledCourseIds.includes(course.id)
         )
       : courses;
 
-    return filteredCourses.map((course, index) => {
+    return filteredCourses?.map?.((course, index) => {
       const courseId = course.id as Any;
       const isEnrolled = enrolledCourseIds.includes(courseId);
       return (

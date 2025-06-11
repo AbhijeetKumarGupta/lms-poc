@@ -16,7 +16,7 @@ async function getMyCoursesDataByUserId(userId: string): Promise<Any> {
     };
   } catch (err) {
     console.error('Failed to fetch my courses data:', err);
-    return null;
+    return {};
   }
 }
 

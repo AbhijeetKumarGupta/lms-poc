@@ -18,7 +18,7 @@ async function getHomeDataByUserId(userId?: string): Promise<Any> {
     };
   } catch (err) {
     console.error('Failed to fetch home data:', err);
-    return null;
+    return {};
   }
 }
 
@@ -26,7 +26,7 @@ export default async function Home() {
   const session = await getServerSession(authOptions);
   const userId = session?.user?.id;
 
-  const { courses = [], enrollments } = await getHomeDataByUserId(userId);
+  const { courses, enrollments } = await getHomeDataByUserId(userId);
 
   return (
     <CoursesContainer

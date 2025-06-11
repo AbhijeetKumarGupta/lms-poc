@@ -60,7 +60,6 @@ const CourseCard = memo(function CourseCard({
       new Date(createdAt).toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
-        day: 'numeric',
       }),
     [createdAt]
   );
@@ -100,7 +99,7 @@ const CourseCard = memo(function CourseCard({
     <Card sx={{ width: 330, position: 'relative', minHeight: 420 }}>
       <CardHeader
         avatar={
-          <Avatar src={creator?.avatar} aria-label={creator?.name}>
+          <Avatar sx={{ width: 33, height: 33 }} src={creator?.avatar} aria-label={creator?.name}>
             {creatorNameShort}
           </Avatar>
         }

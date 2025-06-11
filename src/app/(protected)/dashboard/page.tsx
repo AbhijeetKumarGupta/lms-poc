@@ -16,7 +16,7 @@ async function getDashboardDataByUserId(userId: string): Promise<Any> {
     };
   } catch (err) {
     console.error('Failed to fetch dashboard data:', err);
-    return null;
+    return {};
   }
 }
 
